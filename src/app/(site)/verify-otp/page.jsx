@@ -1,7 +1,8 @@
 'use client'
-import Link from 'next/link'
 import React, { useContext, useState } from 'react'
-import OTPInput, { ResendOTP } from "otp-input-react";
+import dynamic from 'next/dynamic';
+// import OTPInput from "otp-input-react";
+const OTPInput = dynamic(() => import("otp-input-react"), { ssr: false });
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { UserContext } from '@/providers/UserProvider';
