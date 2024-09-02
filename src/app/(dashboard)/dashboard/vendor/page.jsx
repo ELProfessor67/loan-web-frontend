@@ -1,7 +1,8 @@
 'use client';
+import AddMembers from '@/components/AddMembers';
 import AddVendorDialog from '@/components/AddVendorDialog';
 import ViewReason from '@/components/ViewResong';
-import { getUserVendorRequest } from '@/http';
+import { getUserMemberRequest, getUserVendorRequest } from '@/http';
 import React, { useEffect, useState } from 'react'
 import { useQuery } from 'react-query';
 
@@ -18,6 +19,18 @@ const page = () => {
     const [addOpen, setAddOpen] = useState(false);
     const [message, setMessage] = useState(null);
     const [status, setStatus] = useState('all');
+    const [members, setMembers] = useState([]);
+    const [memberOpen,setMemberOpen] = useState(false)
+
+
+    const getMembers = async () => {
+        try {
+            const {data} = await getUserMemberRequest();
+            return data.members;
+        } catch (error) {
+            return []
+        }
+    }
 
     const getVendors = async () => {
         try {
@@ -28,6 +41,7 @@ const page = () => {
         }
     }
     const {data, isLoading} = useQuery('uservendor', getVendors)
+    const {data:mdata, isLoading:misLoading} = useQuery('usermember', getMembers)
     
     
     const getDataByStatus = (status) => {
@@ -44,11 +58,19 @@ const page = () => {
                     <div className='min-h-screen'>
                         <div className='flex items-center justify-between'>
                             <h1>Vendor</h1>
-                            <div className="header-right-btn f-right d-lg-block">
-                                <button className="btn header-btn" onClick={() => setAddOpen(true)}>
-                                    Add Vendor
-                                </button>
+                            <div className='flex flex-row flex-wrap gap-4'>
+                                <div className="header-right-btn f-right d-lg-block">
+                                    <button className="btn header-btn" onClick={() => setAddOpen(true)}>
+                                        Add Sales
+                                    </button>
+                                </div>
+                                <div className="header-right-btn f-right d-lg-block">
+                                    <button className="btn header-btn" onClick={() => setMemberOpen(true)}>
+                                        Add Vendor
+                                    </button>
+                                </div>
                             </div>
+                           
                         </div>
 
 
@@ -126,8 +148,9 @@ const page = () => {
                     </div>
                 </div>
             </div>
-            <AddVendorDialog open={addOpen} onClose={() => setAddOpen(false)} />
+            <AddVendorDialog open={addOpen} onClose={() => setAddOpen(false)} members={mdata}/>
             <ViewReason message={message} open={message} onClose={() => setMessage(null)}/>
+            <AddMembers open={memberOpen} onClose={() => setMemberOpen(false)}/>
         </>
 
     )

@@ -6,7 +6,7 @@ import { addVendorRequest, getServiceChargeRequest } from '@/http';
 import { toast } from 'react-toastify';
 import { useQueryClient } from 'react-query';
 
-const AddVendorDialog = ({ open, onClose }) => {
+const AddVendorDialog = ({ open, onClose,members }) => {
     const [step, setStep] = useState(0);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -113,6 +113,18 @@ const AddVendorDialog = ({ open, onClose }) => {
         }
     }
 
+    const handleNameChange = e => {
+        const name = e.target.value; 
+        const member = members?.find(m => m.name == name);
+        if(member){
+            setEmail(member.email)
+            setAddress(member.address)
+            setCity(member.city)
+            setState(member.state)
+            setPhone(member.phone)
+        }
+        setName(name)
+    }
 
     const handleAttechmentChange = (e, setState) => {
         const file = e.target.files[0];
@@ -130,6 +142,7 @@ const AddVendorDialog = ({ open, onClose }) => {
                         step == 0 ?
                             (
                                 <div className="w-full  mt-8" >
+                                    
                                     <div className="mx-auto max-w-xl">
                                         <input
                                             className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white "
@@ -137,8 +150,16 @@ const AddVendorDialog = ({ open, onClose }) => {
                                             placeholder="Enter your name"
                                             required={true}
                                             value={name}
-                                            onChange={(e) => setName(e.target.value)}
+                                            onChange={(e) => handleNameChange(e)}
+                                            list="member"
                                         />
+                                        <datalist id='member'>
+                                            {
+                                                members && members.map(({name,_id},i) => (
+                                                    <option key={name}>{name}</option>
+                                                ))
+                                            }
+                                        </datalist>
                                         <input
                                             className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
                                             type="email"

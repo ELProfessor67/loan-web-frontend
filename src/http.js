@@ -16,6 +16,8 @@ export const loginRequest = async (formData) => await api.post('/login',formData
 export const loadUserRequest = async () => await api.get('/me');
 export const getServiceChargeRequest = async () => await api.get('/service-charge');
 export const getUserVendorRequest = async () => await api.get('/vendor/get-by-user/');
+export const getUserMemberRequest = async () => await api.get('/vendor/get-member/');
+export const addUserMemberRequest = async (formData) => await api.post('/vendor/add-member/',formData);
 export const getAllVendorRequest = async () => await api.get('/vendor/all');
 export const getVendorDetailRequest = async (id) => await api.get(`/vendor/get/${id}`);
 export const logoutRequest = async () => await api.get('/logout');
