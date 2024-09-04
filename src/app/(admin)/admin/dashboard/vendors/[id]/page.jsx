@@ -186,6 +186,16 @@ const page = ({ params }) => {
                                             </a>
                                         </div>
                                     </div>
+                                    <div className='flex flex-1 flex-col gap-1'>
+                                            <label>
+                                            Freight Company Address
+                                            </label>
+                                            <input
+                                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white "
+                                                readOnly={true}
+                                                value={data?.freight.companyName}
+                                            />
+                                        </div>
                                     <div className='flex items-center gap-4 flex-col md:flex-row mt-3'>
                                         <div className='flex flex-1 flex-col gap-1'>
                                             <label>
@@ -221,6 +231,32 @@ const page = ({ params }) => {
                                             </a>
                                         </div>
                                     </div>
+
+
+
+                                    <div className='flex items-center gap-4 flex-col md:flex-row mt-3'>
+                                        <div className='flex flex-1 flex-col gap-1'>
+                                            <label>
+                                                Sales Company Name
+                                            </label>
+                                            <input
+                                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white "
+                                                readOnly={true}
+                                                value={data?.sales.companyName}
+                                            />
+                                        </div>
+                                        <div className='flex flex-1 flex-col gap-1'>
+                                            <label>
+                                                Sales Company Address
+                                            </label>
+                                            <input
+                                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white "
+                                                readOnly={true}
+                                                value={data?.sales.companyAddress}
+                                            />
+                                        </div>
+                                    </div>
+
                                     <div className='flex items-center gap-4 flex-col md:flex-row mt-3'>
                                         <div className='flex flex-1 flex-col gap-1'>
                                             <label>

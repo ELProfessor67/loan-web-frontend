@@ -6,7 +6,7 @@ import { addVendorRequest, getServiceChargeRequest } from '@/http';
 import { toast } from 'react-toastify';
 import { useQueryClient } from 'react-query';
 
-const AddVendorDialog = ({ open, onClose,members }) => {
+const AddVendorDialog = ({ open, onClose,members,companies }) => {
     const [step, setStep] = useState(0);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -26,8 +26,12 @@ const AddVendorDialog = ({ open, onClose,members }) => {
     const [sales, setsales] = useState(null)
     const [warehouse, setwarehouse] = useState(null)
     const [serviceCharge, setServiceCharge] = useState(200);
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
+    const [SalesCompanyName, setSalesCompanyName] = useState('');
+    const [SalesCompanyAddress, setSalesCompanyAddress] = useState('');
+    const [freightCompanyName, setfreightCompanyName] = useState('');
    
+    
 
     const [loading, setLoading] = useState(false);
 
@@ -71,6 +75,9 @@ const AddVendorDialog = ({ open, onClose,members }) => {
             formData.append('freightAmount',freightAmount);
             formData.append('freightPallets',freightPallets);
             formData.append('salesAmount',salesAmount);
+            formData.append('SalesCompanyAddress',SalesCompanyAddress)
+            formData.append('SalesCompanyName',SalesCompanyName)
+            formData.append('freightCompanyName',freightCompanyName)
             formData.append('profitAmount',profitAmount);
             if(warehouseAmount){
                 formData.append('warehouseAmount',warehouseAmount);
@@ -81,6 +88,7 @@ const AddVendorDialog = ({ open, onClose,members }) => {
             formData.append('backoffice',backoffice);
             formData.append('freight',freight);
             formData.append('sales',sales);
+            
 
             const {data} = await addVendorRequest(formData);
             queryClient.invalidateQueries('uservendor');
@@ -124,6 +132,15 @@ const AddVendorDialog = ({ open, onClose,members }) => {
             setPhone(member.phone)
         }
         setName(name)
+    }
+
+    const handleCompanyNameChange = (value) => {
+   
+        const company = companies.find(c => c.name == value);
+        if(company){
+            setSalesCompanyAddress(company.address)
+        }
+        setSalesCompanyName(value);
     }
 
     const handleAttechmentChange = (e, setState) => {
@@ -249,7 +266,14 @@ const AddVendorDialog = ({ open, onClose,members }) => {
                                                 />
                                             </div>
 
-
+                                            <input
+                                                className="w-full mt-4 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                                                type="text"
+                                                placeholder="Freight Company Name"
+                                                required={true}
+                                                value={freightCompanyName}
+                                                onChange={(e) => setfreightCompanyName(e.target.value)}
+                                            />
                                             <div className='flex flex-col md:flex-row md:gap-2'>
                                                 <input
                                                     className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
@@ -280,6 +304,33 @@ const AddVendorDialog = ({ open, onClose,members }) => {
                                                 />
                                             </div>
 
+                                            <div className='flex flex-col md:flex-row md:gap-2'>
+                                                <input
+                                                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
+                                                    type="text"
+                                                    placeholder="Sales Company Name"
+                                                    required={true}
+                                                    value={SalesCompanyName}
+                                                    onChange={(e) => handleCompanyNameChange(e.target.value)}
+                                                    list='company'
+
+                                                />
+                                                <datalist id='company'>
+                                                    {
+                                                        companies && companies.map((c) => (
+                                                            <option>{c.name}</option>
+                                                        ))
+                                                    }
+                                                </datalist>
+                                                <input
+                                                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
+                                                    type="text"
+                                                    placeholder="Sales Company Address"
+                                                    required={true}
+                                                    value={SalesCompanyAddress}
+                                                    onChange={(e) => setSalesCompanyAddress(e.target.value)}
+                                                />
+                                            </div>
 
                                             <div className='flex flex-col md:flex-row md:gap-2'>
                                                 <input
