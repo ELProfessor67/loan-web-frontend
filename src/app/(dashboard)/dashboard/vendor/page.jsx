@@ -166,7 +166,7 @@ const page = () => {
                     </div>
                 </div>
             </div>
-            <AddVendorDialog open={addOpen} onClose={() => setAddOpen(false)} members={mdata} companies={cdata}/>
+            <AddVendorDialog open={addOpen} onClose={() => setAddOpen(false)} members={mdata} companies={cdata} setMemberOpen={setMemberOpen}/>
             <ViewReason message={message} open={message} onClose={() => setMessage(null)}/>
             <AddMembers open={memberOpen} onClose={() => setMemberOpen(false)}/>
             <CompanyAdd open={companyOpen} onClose={() => setCompanyOpen(false)} />

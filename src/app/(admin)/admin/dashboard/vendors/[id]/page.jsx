@@ -144,9 +144,66 @@ const page = ({ params }) => {
                                         </div>
                                     </div>
 
+                                    <div className='flex items-center gap-4 flex-col md:flex-row mt-3'>
+                                        <div className='flex flex-1 flex-col gap-1'>
+                                            <label>
+                                                Type
+                                            </label>
+                                            <input
+                                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white "
+                                                readOnly={true}
+                                                value={data?.type}
+                                            />
+                                        </div>
+                                        <div className='flex flex-1 flex-col gap-1'>
+                                            <label>
+                                                Place Order Number
+                                            </label>
+                                            <input
+                                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white "
+                                                readOnly={true}
+                                                value={data?.PONumber}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className='flex flex-1 flex-col gap-1 mt-3'>
+                                            <label>
+                                                Terms
+                                            </label>
+                                            <input
+                                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white "
+                                                readOnly={true}
+                                                value={data?.terms}
+                                            />
+                                    </div>
+
 
                                     <h1 className='mt-5'>Amounts and Attechments</h1>
 
+                                    <div className='flex flex-1 flex-col gap-1 mt-3'>
+                                            <label>
+                                                Deal Id
+                                            </label>
+                                            <input
+                                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white "
+                                                readOnly={true}
+                                                value={data?.dealId}
+                                            />
+                                    </div>
+
+                                    <div className='flex flex-1 flex-col gap-1 mt-3'>
+                                            <label>
+                                            copy of purchase order and attach
+                                            </label>
+                                            <a
+                                                target="_zeeshan"
+                                                href={`${BACKEND_URL}/${data?.copyOrderAttachment?.file?.replace(/\\/g, '/')}`}
+                                                className="w-full text-black cursor-pointer px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white "
+                                               
+                                            >
+                                                Click To View
+                                            </a>
+                                        </div>
 
                                     <div className='flex items-center gap-4 flex-col md:flex-row mt-3'>
                                         <div className='flex flex-1 flex-col gap-1'>
@@ -186,7 +243,7 @@ const page = ({ params }) => {
                                             </a>
                                         </div>
                                     </div>
-                                    <div className='flex flex-1 flex-col gap-1'>
+                                    <div className='flex flex-1 flex-col gap-1 mt-3'>
                                             <label>
                                             Freight Company Address
                                             </label>
@@ -230,6 +287,41 @@ const page = ({ params }) => {
                                                 Click To View
                                             </a>
                                         </div>
+                                    </div>
+
+
+                                    <div className='flex items-center gap-4 flex-col md:flex-row mt-3'>
+                                        <div className='flex flex-1 flex-col gap-1'>
+                                            <label>
+                                            Tracking Link
+                                            </label>
+                                            <input
+                                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white "
+                                                readOnly={true}
+                                                value={data?.freight.trackingLink}
+                                            />
+                                        </div>
+                                        <div className='flex flex-1 flex-col gap-1'>
+                                            <label>
+                                            Shipped Date
+                                            </label>
+                                            <input
+                                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white "
+                                                readOnly={true}
+                                                value={data?.freight.shippedDate}
+                                            />
+                                        </div>
+                                        <div className='flex flex-1 flex-col gap-1'>
+                                            <label>
+                                            Recive Date
+                                            </label>
+                                            <input
+                                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white "
+                                                readOnly={true}
+                                                value={data?.freight.reciveDate}
+                                            />
+                                        </div>
+                                        
                                     </div>
 
 
