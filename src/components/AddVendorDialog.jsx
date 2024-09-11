@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { IoMdClose } from "react-icons/io";
 import Stepper from './Stepper';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
-import { addVendorRequest, getServiceChargeRequest } from '@/http';
+import { addVendorRequest, getServiceChargeRequest, getUniqueIdRequest } from '@/http';
 import { toast } from 'react-toastify';
 import { useQueryClient } from 'react-query';
 import { v4 as uuidv4 } from 'uuid';
+import { userAgent } from 'next/server';
+import { UserContext } from '@/providers/UserProvider';
 
 const AddVendorDialog = ({ open, onClose, members, companies, setMemberOpen }) => {
     const [step, setStep] = useState(0);
@@ -16,7 +18,7 @@ const AddVendorDialog = ({ open, onClose, members, companies, setMemberOpen }) =
     const [state, setState] = useState('');
     const [phone, setPhone] = useState('');
     const [amount, setAmount] = useState('');
-    const [backofficeAmount, setbackofficeAmount] = useState('');
+    const [backofficeAmount, setbackofficeAmount] = useState('0');
     const [freightAmount, setfreightAmount] = useState('');
     const [freightPallets, setfreightPallets] = useState('');
     const [salesAmount, setsalesAmount] = useState('');
@@ -30,18 +32,42 @@ const AddVendorDialog = ({ open, onClose, members, companies, setMemberOpen }) =
     const queryClient = useQueryClient();
     const [SalesCompanyName, setSalesCompanyName] = useState('');
     const [SalesCompanyAddress, setSalesCompanyAddress] = useState('');
+    const [companyId, setcompanyId] = useState('');
+
     const [freightCompanyName, setfreightCompanyName] = useState('');
     const [showAddVendor, setShowAddVendor] = useState(false);
     const [type, setType] = useState('');
     const [PONumber, setPONumber] = useState('')
     const [terms, setterms] = useState('')
     const [terms2, setterms2] = useState('')
-    const [dealId, setdealId] = useState(uuidv4())
+    const [dealId, setdealId] = useState(0)
     const [trackingLink, settrackingLink] = useState('')
     const [shippedDate, setshippedDate] = useState('')
     const [reciveDate, setreciveDate] = useState('')
     const [copyorder, setcopyorder] = useState(null);
     const [showaddtrack, setshowaddtrack] = useState();
+
+    const [trackingNumber, settrackingNumber] = useState();
+    const [salesShippedDate, setsalesShippedDate] = useState();
+    const [ashippedDate, setashippedDate] = useState();
+    const [afreciveDate, setafreciveDate] = useState();
+    const [asalesShippedDate, setasalesShippedDate] = useState();
+    const [dealDate, setdealDate] = useState();
+    const {user} = useContext(UserContext)
+
+
+
+    async function getId() {
+        try {
+            const { data } = await getUniqueIdRequest();
+            setdealId(data.id);
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+    useEffect(() => {
+        getId()
+    }, [])
 
 
 
@@ -91,14 +117,26 @@ const AddVendorDialog = ({ open, onClose, members, companies, setMemberOpen }) =
             formData.append('SalesCompanyName', SalesCompanyName)
             formData.append('freightCompanyName', freightCompanyName)
             formData.append('profitAmount', profitAmount);
-            formData.append('type',type);
-            formData.append('PONumber',PONumber);
-            formData.append('terms',terms);
-            formData.append('dealId',dealId);
-            formData.append('copyorder',copyorder);
-            formData.append('trackingLink',trackingLink);
-            formData.append('shippedDate',shippedDate);
-            formData.append('reciveDate',reciveDate);
+            formData.append('type', type);
+            formData.append('PONumber', PONumber);
+            formData.append('terms', terms);
+            formData.append('dealId', dealId);
+            formData.append('copyorder', copyorder);
+            formData.append('trackingLink', trackingLink);
+            formData.append('shippedDate', shippedDate);
+            formData.append('reciveDate', reciveDate);
+
+
+            formData.append('dealDate', dealDate);
+            formData.append('trackingNumber', trackingNumber);
+            formData.append('salesShippedDate', salesShippedDate);
+            formData.append('companyId', user?.company?._id);
+
+            formData.append('shippedDate', ashippedDate);
+            formData.append('reciveDate', afreciveDate);
+            formData.append('salesShippedDate', asalesShippedDate);
+
+
             if (warehouseAmount) {
                 formData.append('warehouseAmount', warehouseAmount);
                 formData.append('warehouse', warehouse);
@@ -135,7 +173,7 @@ const AddVendorDialog = ({ open, onClose, members, companies, setMemberOpen }) =
             setPONumber('');
             setterms('');
             setterms2('');
-            setdealId(uuidv4());
+            getId()
             setcopyorder(null);
             settrackingLink('')
             setshippedDate('');
@@ -173,6 +211,7 @@ const AddVendorDialog = ({ open, onClose, members, companies, setMemberOpen }) =
         const company = companies.find(c => c.name == value);
         if (company) {
             setSalesCompanyAddress(company.address)
+            setcompanyId(company._id)
         }
         setSalesCompanyName(value);
     }
@@ -236,7 +275,7 @@ const AddVendorDialog = ({ open, onClose, members, companies, setMemberOpen }) =
                                         <input
                                             className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
                                             type="text"
-                                            placeholder="Enper Place Oder Number"
+                                            placeholder="Enter Purchase Order Number"
                                             required={true}
                                             value={PONumber}
                                             onChange={(e) => setPONumber(e.target.value)}
@@ -255,7 +294,7 @@ const AddVendorDialog = ({ open, onClose, members, companies, setMemberOpen }) =
                                             <option>Net 10 days</option>
                                             <option>Choice</option>
                                         </select>
-                                        
+
 
                                         {
                                             terms2 == 'Choice' &&
@@ -328,38 +367,44 @@ const AddVendorDialog = ({ open, onClose, members, companies, setMemberOpen }) =
                                             <button className='text-2xl text-black mb-3 flex items-center justify-between w-full' onClick={() => setStep(0)}>
                                                 <FaArrowLeft />
                                                 <h3>New Deal</h3>
-                                                <span></span>
+                                                <span>{dealId}</span>
                                             </button>
 
-                                            <input
-                                                className="w-full px-8 mb-4 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                                                type="text"
-                                                placeholder="Deal Id"
-                                                required={true}
-                                                value={dealId}
-                                            />
-                                            <input
-                                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                                                type="number"
-                                                placeholder="Amount"
-                                                required={true}
-                                                value={amount}
-                                                onChange={(e) => setAmount(e.target.value)}
-                                            />
 
-                                            <label htmlFor='copyorder' className="w-full cursor-pointer block customFileInput before:text-[10px] px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4 whitespace-pre !mb-0">
-                                                {copyorder?.name ? copyorder.name?.slice(0, 20) : 'copy of purchase order and attach '}
-                                            </label>
-                                            <input
-                                                hidden={true}
-                                                id='copyorder'
-                                                type="file"
-                                                required={true}
-                                                onChange={(e) => handleAttechmentChange(e, setcopyorder)}
+                                            <div className='border border-black p-2 rounded-md'>
+                                                <h3 className='mb-2'>Deals</h3>
+                                                <input
+                                                    className="w-full px-8 mb-4 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                                                    type="text"
+                                                    placeholder="Enter Deal Date"
+                                                    required={true}
+                                                    value={dealDate}
+                                                    onChange={(e) => setdealDate(e.target.value)}
 
-                                            />
+                                                />
+                                                <input
+                                                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                                                    type="number"
+                                                    placeholder="COG Amount"
+                                                    required={true}
+                                                    value={amount}
+                                                    onChange={(e) => setAmount(e.target.value)}
+                                                />
 
-                                            <div className='flex flex-col md:flex-row md:gap-2'>
+                                                <label htmlFor='copyorder' className="w-full cursor-pointer block customFileInput before:text-[10px] px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4 whitespace-pre !mb-0">
+                                                    {copyorder?.name ? copyorder.name?.slice(0, 20) : 'copy of purchase order and attach '}
+                                                </label>
+                                                <input
+                                                    hidden={true}
+                                                    id='copyorder'
+                                                    type="file"
+                                                    required={true}
+                                                    onChange={(e) => handleAttechmentChange(e, setcopyorder)}
+
+                                                />
+                                            </div>
+
+                                            {/* <div className='flex flex-col md:flex-row md:gap-2'>
                                                 <input
                                                     className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
                                                     type="number"
@@ -379,145 +424,205 @@ const AddVendorDialog = ({ open, onClose, members, companies, setMemberOpen }) =
                                                     onChange={(e) => handleAttechmentChange(e, setbackoffice)}
 
                                                 />
-                                            </div>
-
-                                            <input
-                                                className="w-full mt-4 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                                                type="text"
-                                                placeholder="Freight Company Name"
-                                                required={true}
-                                                value={freightCompanyName}
-                                                onChange={(e) => setfreightCompanyName(e.target.value)}
-                                            />
+                                            </div> */}
 
 
-                                            <div>
-
-                                                <div className='flex flex-col md:flex-row md:gap-2'>
-                                                    <input
-                                                        className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
-                                                        type="number"
-                                                        placeholder="Freight Amount"
-                                                        required={true}
-                                                        value={freightAmount}
-                                                        onChange={(e) => setfreightAmount(e.target.value)}
-                                                    />
-                                                    <input
-                                                        className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
-                                                        type="number"
-                                                        placeholder="Pallets Amount"
-                                                        required={true}
-                                                        value={freightPallets}
-                                                        onChange={(e) => setfreightPallets(e.target.value)}
-                                                    />
-                                                    <label htmlFor='freight' className="w-full cursor-pointer block customFileInput before:text-[10px] px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4 whitespace-pre !mb-0">
-                                                        {freight?.name ? freight.name?.slice(0, 20) : 'Freight Attechment'}
-                                                    </label>
-                                                    <input
-                                                        hidden={true}
-                                                        id='freight'
-                                                        type="file"
-                                                        required={true}
-                                                        onChange={(e) => handleAttechmentChange(e, setfreight)}
-
-                                                    />
+                                            <div className='border border-black p-2 rounded-md mt-4'>
+                                                <h3 className='mb-2'>Freight</h3>
+                                                <input
+                                                    className="w-full mt-4 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                                                    type="text"
+                                                    placeholder="Freight Company Name"
+                                                    required={true}
+                                                    value={freightCompanyName}
+                                                    onChange={(e) => setfreightCompanyName(e.target.value)}
+                                                />
 
 
-                                                </div>
-
-                                                <div className='flex items-center justify-end my-2'>
-                                                    <button className='text-red-500 text-normal bg-none border-none outline-none text-sm' onClick={() => setshowaddtrack(prev => !prev)}>Add Track Link</button>
-                                                </div>
-                                            </div>
-                                            {
-                                                showaddtrack &&
-                                                <>
-                                                    <input
-                                                        className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
-                                                        type="text"
-                                                        placeholder="Enter Tracking Link"
-                                                        required={true}
-                                                        value={trackingLink}
-                                                        onChange={(e) => settrackingLink(e.target.value)}
-                                                       
-
-                                                    />
+                                                <div>
 
                                                     <div className='flex flex-col md:flex-row md:gap-2'>
                                                         <input
                                                             className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
-                                                            type="text"
-                                                            placeholder="Enter Shippped Date"
+                                                            type="number"
+                                                            placeholder="Freight Amount"
                                                             required={true}
-                                                            value={shippedDate}
-                                                            onChange={(e) => setshippedDate(e.target.value)}
-                                                          
+                                                            value={freightAmount}
+                                                            onChange={(e) => setfreightAmount(e.target.value)}
+                                                        />
+                                                        <input
+                                                            className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
+                                                            type="number"
+                                                            placeholder="Pallets Amount"
+                                                            required={true}
+                                                            value={freightPallets}
+                                                            onChange={(e) => setfreightPallets(e.target.value)}
+                                                        />
+                                                        <label htmlFor='freight' className="w-full cursor-pointer block customFileInput before:text-[10px] px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4 whitespace-pre !mb-0">
+                                                            {freight?.name ? freight.name?.slice(0, 20) : 'Freight Attechment'}
+                                                        </label>
+                                                        <input
+                                                            hidden={true}
+                                                            id='freight'
+                                                            type="file"
+                                                            required={true}
+                                                            onChange={(e) => handleAttechmentChange(e, setfreight)}
 
                                                         />
-                                                       <input
+
+
+                                                    </div>
+
+                                                    <div className='flex items-center justify-end my-2'>
+                                                        <button className='text-red-500 text-normal bg-none border-none outline-none text-sm' onClick={() => setshowaddtrack(prev => !prev)}>Add Track Link</button>
+                                                    </div>
+                                                </div>
+                                                {
+                                                    showaddtrack &&
+                                                    <>
+                                                        <input
                                                             className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
                                                             type="text"
-                                                            placeholder="Enter Recive Date"
+                                                            placeholder="Enter Tracking Link"
                                                             required={true}
-                                                            value={reciveDate}
-                                                            onChange={(e) => setreciveDate(e.target.value)}
-                                                          
+                                                            value={trackingLink}
+                                                            onChange={(e) => settrackingLink(e.target.value)}
+
 
                                                         />
-                                                    </div>
-                                                </>
+                                                        <input
+                                                            className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
+                                                            type="text"
+                                                            placeholder="Enter Tracking Link"
+                                                            required={true}
+                                                            value={trackingNumber}
+                                                            onChange={(e) => settrackingNumber(e.target.value)}
 
-                                            }
+                                                        />
+
+                                                        <div className='flex flex-col md:flex-row md:gap-2'>
+                                                            <input
+                                                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
+                                                                type="text"
+                                                                placeholder="Enter Shippped Date"
+                                                                required={true}
+                                                                value={shippedDate}
+                                                                onChange={(e) => setshippedDate(e.target.value)}
 
 
-                                            <div className='flex flex-col md:flex-row md:gap-2'>
-                                                <input
-                                                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
-                                                    type="text"
-                                                    placeholder="Sales Company Name"
-                                                    required={true}
-                                                    value={SalesCompanyName}
-                                                    onChange={(e) => handleCompanyNameChange(e.target.value)}
-                                                    list='company'
+                                                            />
+                                                            <label htmlFor='shippeddate' className="w-full cursor-pointer block customFileInput before:text-[10px] px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4 whitespace-pre !mb-0">
+                                                                {ashippedDate?.name ? ashippedDate.name?.slice(0, 20) : 'Attachment'}
+                                                            </label>
+                                                            <input
+                                                                hidden={true}
+                                                                id='shippeddate'
+                                                                type="file"
+                                                                required={true}
+                                                                onChange={(e) => handleAttechmentChange(e, setashippedDate)}
 
-                                                />
-                                                <datalist id='company'>
-                                                    {
-                                                        companies && companies.map((c) => (
-                                                            <option>{c.name}</option>
-                                                        ))
-                                                    }
-                                                </datalist>
-                                                <input
+                                                            />
+                                                        </div>
+
+                                                        <div className='flex flex-col md:flex-row md:gap-2'>
+                                                            <input
+                                                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
+                                                                type="text"
+                                                                placeholder="Enter Recieve Date"
+                                                                required={true}
+                                                                value={reciveDate}
+                                                                onChange={(e) => setreciveDate(e.target.value)}
+
+
+                                                            />
+                                                            <label htmlFor='recivedate' className="w-full cursor-pointer block customFileInput before:text-[10px] px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4 whitespace-pre !mb-0">
+                                                                {afreciveDate?.name ? afreciveDate.name?.slice(0, 20) : 'Attachment'}
+                                                            </label>
+                                                            <input
+                                                                hidden={true}
+                                                                id='recivedate'
+                                                                type="file"
+                                                                required={true}
+                                                                onChange={(e) => handleAttechmentChange(e, setafreciveDate)}
+
+                                                            />
+                                                        </div>
+                                                    </>
+
+                                                }
+                                            </div>
+
+
+                                            <div className='border border-black p-2 rounded-md mt-4'>
+                                                <h3 className='mb-2'>Sales</h3>
+
+                                                <div className='flex flex-col md:flex-row md:gap-2'>
+                                                    <input
+                                                        className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
+                                                        type="text"
+                                                        placeholder="Sales Company Name"
+                                                        required={true}
+                                                        value={SalesCompanyName}
+                                                        onChange={(e) => handleCompanyNameChange(e.target.value)}
+                                                       
+
+                                                    />
+                                                    {/* <input
                                                     className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
                                                     type="text"
                                                     placeholder="Sales Company Address"
                                                     required={true}
                                                     value={SalesCompanyAddress}
                                                     onChange={(e) => setSalesCompanyAddress(e.target.value)}
-                                                />
-                                            </div>
+                                                /> */}
+                                                </div>
 
-                                            <div className='flex flex-col md:flex-row md:gap-2'>
-                                                <input
-                                                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
-                                                    type="number"
-                                                    placeholder="Sales Amount"
-                                                    required={true}
-                                                    value={salesAmount}
-                                                    onChange={(e) => setsalesAmount(e.target.value)}
-                                                />
-                                                <label htmlFor='sales' className="w-full cursor-pointer block customFileInput before:text-[10px] px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4 whitespace-pre !mb-0">
-                                                    {sales?.name ? sales.name?.slice(0, 20) : 'Sales Attechment'}
-                                                </label>
-                                                <input
-                                                    hidden={true}
-                                                    id='sales'
-                                                    type="file"
-                                                    required={true}
-                                                    onChange={(e) => handleAttechmentChange(e, setsales)}
+                                                <div className='flex flex-col md:flex-row md:gap-2'>
+                                                    <input
+                                                        className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
+                                                        type="number"
+                                                        placeholder="Sales Amount"
+                                                        required={true}
+                                                        value={salesAmount}
+                                                        onChange={(e) => setsalesAmount(e.target.value)}
+                                                    />
+                                                    <label htmlFor='sales' className="w-full cursor-pointer block customFileInput before:text-[10px] px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4 whitespace-pre !mb-0">
+                                                        {sales?.name ? sales.name?.slice(0, 20) : 'Sales Attechment'}
+                                                    </label>
+                                                    <input
+                                                        hidden={true}
+                                                        id='sales'
+                                                        type="file"
+                                                        required={true}
+                                                        onChange={(e) => handleAttechmentChange(e, setsales)}
 
-                                                />
+                                                    />
+                                                </div>
+
+
+                                                <div className='flex flex-col md:flex-row md:gap-2'>
+                                                    <input
+                                                        className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
+                                                        type="text"
+                                                        placeholder="Enter Sales Shippped Date"
+                                                        required={true}
+                                                        value={salesShippedDate}
+                                                        onChange={(e) => setsalesShippedDate(e.target.value)}
+
+
+                                                    />
+                                                    <label htmlFor='asalesdate' className="w-full cursor-pointer block customFileInput before:text-[10px] px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4 whitespace-pre !mb-0">
+                                                        {asalesShippedDate?.name ? asalesShippedDate.name?.slice(0, 20) : 'Attachment'}
+                                                    </label>
+                                                    <input
+                                                        hidden={true}
+                                                        id='asalesdate'
+                                                        type="file"
+                                                        required={true}
+                                                        onChange={(e) => handleAttechmentChange(e, setasalesShippedDate)}
+
+                                                    />
+                                                </div>
                                             </div>
 
 
@@ -547,7 +652,7 @@ const AddVendorDialog = ({ open, onClose, members, companies, setMemberOpen }) =
                                             <input
                                                 className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
                                                 type="phone"
-                                                placeholder={`Your Profit ${profitAmount || 0}, ${(profitAmount) / (salesAmount || 0)}%`}
+                                                placeholder={`Your Profit in percentage ${salesAmount ? (profitAmount / salesAmount) * 100 : 0}%`}
                                                 readOnly
                                             />
                                             <input

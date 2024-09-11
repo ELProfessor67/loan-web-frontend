@@ -4,6 +4,7 @@ import AddVendorDialog from '@/components/AddVendorDialog';
 import CompanyAdd from '@/components/CompanyAdd';
 import ViewReason from '@/components/ViewResong';
 import { getAllCompanyRequest, getUserMemberRequest, getUserVendorRequest } from '@/http';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import { useQuery } from 'react-query';
 
@@ -79,7 +80,7 @@ const page = () => {
                                 </div>
                                 <div className="header-right-btn f-right d-lg-block">
                                     <button className="btn header-btn" onClick={() => setAddOpen(true)}>
-                                        Add Sales
+                                        Add Deals
                                     </button>
                                 </div>
                                 <div className="header-right-btn f-right d-lg-block">
@@ -105,6 +106,9 @@ const page = () => {
                                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
                                         <tr>
                                             <th scope="col" class="px-6 py-3">
+                                                #
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
                                                 Vendor Name
                                             </th>
                                             <th scope="col" class="px-6 py-3">
@@ -119,13 +123,19 @@ const page = () => {
                                             <th scope="col" class="px-6 py-3">
                                                 Status
                                             </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                View
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {
                                             !isLoading &&
-                                            data.length != 0 && getDataByStatus(status)?.map((vendor) => (
-                                                <tr class="bg-white border-b  ">
+                                            data.length != 0 && getDataByStatus(status)?.map((vendor,i) => (
+                                                <tr class="bg-white border-b  " key={vendor._id}>
+                                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                                                        {i+1}
+                                                    </th>
                                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                                                         {vendor?.name}
                                                     </th>
@@ -146,6 +156,10 @@ const page = () => {
                                                             <button className='block text-blue-500 mt-3' onClick={() => setMessage(vendor.message)}>View Reason</button>
                                                         }
                                     
+                                                    </td>
+
+                                                    <td class="px-6 py-4">
+                                                        <Link href={`/dashboard/vendor/${vendor._id}`} className='text-blue-500'>View</Link>
                                                     </td>
                                                 </tr>
                                             ))

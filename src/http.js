@@ -17,6 +17,7 @@ export const loadUserRequest = async () => await api.get('/me');
 export const getServiceChargeRequest = async () => await api.get('/service-charge');
 export const getUserVendorRequest = async () => await api.get('/vendor/get-by-user/');
 export const getUserMemberRequest = async () => await api.get('/vendor/get-member/');
+export const getUniqueIdRequest = async () => await api.get('/vendor/get-id/');
 
 export const addUserMemberRequest = async (formData) => await api.post('/vendor/add-member/',formData);
 export const addUserCompanyRequest = async (formData) => await api.post('/vendor/add-company/',formData);

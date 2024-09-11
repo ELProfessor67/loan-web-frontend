@@ -14,6 +14,10 @@ const AddMembers = ({ open, onClose }) => {
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
     const [phone, setPhone] = useState('');
+    const [accountNumber, setaccountNumber] = useState('');
+    const [routingNumber, setroutingNumber] = useState('');
+    const [bankName, setbankName] = useState('');
+    const [bankAddress, setbankAddress] = useState('');
     
     const queryClient = useQueryClient()
    
@@ -34,6 +38,10 @@ const AddMembers = ({ open, onClose }) => {
             formData.append('city',city);
             formData.append('state',state);
             formData.append('phone',phone);
+            formData.append('accountNumber',accountNumber);
+            formData.append('routingNumber',routingNumber);
+            formData.append('bankName',bankName);
+            formData.append('bankAddress',bankAddress);
 
             const {data} = await addUserMemberRequest(formData);
             queryClient.invalidateQueries('usermember');
@@ -46,6 +54,10 @@ const AddMembers = ({ open, onClose }) => {
             setCity('')
             setState('')
             setPhone('')
+            setaccountNumber('')
+            setroutingNumber('')
+            setbankAddress('')
+            setbankName('')
            
 
         } catch (error) {
@@ -72,7 +84,7 @@ const AddMembers = ({ open, onClose }) => {
                                         <input
                                             className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white "
                                             type="text"
-                                            placeholder="Enter your name"
+                                            placeholder="Enter Vendor Name"
                                             required={true}
                                             value={name}
                                             onChange={(e) => setName(e.target.value)}
@@ -81,7 +93,7 @@ const AddMembers = ({ open, onClose }) => {
                                         <input
                                             className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
                                             type="email"
-                                            placeholder="Email"
+                                            placeholder="Enter Vendor Email"
                                             required={true}
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
@@ -89,7 +101,7 @@ const AddMembers = ({ open, onClose }) => {
                                         <input
                                             className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
                                             type="text"
-                                            placeholder="Your Address"
+                                            placeholder="Enter Vendor Address"
                                             required={true}
                                             value={address}
                                             onChange={(e) => setAddress(e.target.value)}
@@ -98,7 +110,7 @@ const AddMembers = ({ open, onClose }) => {
                                             <input
                                                 className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
                                                 type="text"
-                                                placeholder="Your State"
+                                                placeholder="Enter Vendor State"
                                                 required={true}
                                                 value={state}
                                                 onChange={(e) => setState(e.target.value)}
@@ -106,7 +118,7 @@ const AddMembers = ({ open, onClose }) => {
                                             <input
                                                 className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
                                                 type="text"
-                                                placeholder="Your City"
+                                                placeholder="Enter Vendor City"
                                                 required={true}
                                                 value={city}
                                                 onChange={(e) => setCity(e.target.value)}
@@ -116,10 +128,43 @@ const AddMembers = ({ open, onClose }) => {
                                         <input
                                             className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
                                             type="phone"
-                                            placeholder="Your Phone"
+                                            placeholder="Enter Vendor Phone"
                                             required={true}
                                             value={phone}
                                             onChange={(e) => setPhone(e.target.value)}
+                                        />
+
+                                        <input
+                                            className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
+                                            type="text"
+                                            placeholder="Enter Vendor Bank Account Number"
+                                            required={true}
+                                            value={accountNumber}
+                                            onChange={(e) => setaccountNumber(e.target.value)}
+                                        />
+                                        <input
+                                            className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
+                                            type="text"
+                                            placeholder="Enter Vendor Bank Routing Number"
+                                            required={true}
+                                            value={routingNumber}
+                                            onChange={(e) => setroutingNumber(e.target.value)}
+                                        />
+                                        <input
+                                            className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
+                                            type="text"
+                                            placeholder="Enter Vendor Bank Name"
+                                            required={true}
+                                            value={bankName}
+                                            onChange={(e) => setbankName(e.target.value)}
+                                        />
+                                        <input
+                                            className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
+                                            type="text"
+                                            placeholder="Enter Vendor Bank Address"
+                                            required={true}
+                                            value={bankAddress}
+                                            onChange={(e) => setbankAddress(e.target.value)}
                                         />
 
 
