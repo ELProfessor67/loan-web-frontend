@@ -20,11 +20,13 @@ export const getUserMemberRequest = async () => await api.get('/vendor/get-membe
 export const getUniqueIdRequest = async () => await api.get('/vendor/get-id/');
 
 export const addUserMemberRequest = async (formData) => await api.post('/vendor/add-member/',formData);
-export const addUserCompanyRequest = async (formData) => await api.post('/vendor/add-company/',formData);
+export const addCompanyRequest = async (formData) => await api.post('/vendor/add-company/',formData);
+export const addSalesCompanyRequest = async (formData) => await api.post('/vendor/add-sales-company/',formData);
 export const addUserBankRequest = async (formData) => await api.post('/vendor/add-bank/',formData);
 
 export const getAllVendorRequest = async () => await api.get('/vendor/all');
 export const getAllCompanyRequest = async () => await api.get('/vendor/get-company');
+export const getAllSalesCompanyRequest = async () => await api.get('/vendor/get-sales-company');
 
 export const getVendorDetailRequest = async (id) => await api.get(`/vendor/get/${id}`);
 export const logoutRequest = async () => await api.get('/logout');

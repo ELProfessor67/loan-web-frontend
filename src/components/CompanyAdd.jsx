@@ -17,12 +17,13 @@ const CompanyAdd = ({ open, onClose }) => {
     const [routingNumber, setroutingNumber] = useState('');
     const [bankName, setbankName] = useState('');
     const [bankAddress, setbankAddress] = useState('');
+    const [contactName, setContactName] = useState('');
 
 
-    const {user} = useContext(UserContext);
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
-        if(user && user.company){
+        if (user && user.company) {
             setName(user.company.name)
             setAddress(user.company.address)
             setemail(user.company.email)
@@ -31,8 +32,9 @@ const CompanyAdd = ({ open, onClose }) => {
             setroutingNumber(user.company.routingNumber)
             setbankName(user.company.bankName)
             setbankAddress(user.company.bankAddress)
+            setContactName(user.company.contactName)
         }
-    },[user])
+    }, [user])
 
 
     const queryClient = useQueryClient()
@@ -49,13 +51,14 @@ const CompanyAdd = ({ open, onClose }) => {
             setLoading(true)
             const formData = new FormData();
             formData.append('name', name);
+            formData.append('contactName', contactName);
             formData.append('address', address);
-            formData.append('phone',phone);
-            formData.append('accountNumber',accountNumber);
-            formData.append('routingNumber',routingNumber);
-            formData.append('bankName',bankName);
-            formData.append('bankAddress',bankAddress);
-            formData.append('email',email);
+            formData.append('phone', phone);
+            formData.append('accountNumber', accountNumber);
+            formData.append('routingNumber', routingNumber);
+            formData.append('bankName', bankName);
+            formData.append('bankAddress', bankAddress);
+            formData.append('email', email);
 
 
             const { data } = await addUserCompanyRequest(formData);
@@ -63,7 +66,7 @@ const CompanyAdd = ({ open, onClose }) => {
             setLoading(false)
             onClose()
             toast.success(data.message);
- 
+
 
         } catch (error) {
             setLoading(false)
@@ -104,14 +107,6 @@ const CompanyAdd = ({ open, onClose }) => {
                                 value={email}
                                 onChange={(e) => setemail(e.target.value)}
                             />
-                            <input
-                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
-                                type="text"
-                                placeholder="Company Address"
-                                required={true}
-                                value={address}
-                                onChange={(e) => setAddress(e.target.value)}
-                            />
 
                             <input
                                 className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
@@ -120,6 +115,22 @@ const CompanyAdd = ({ open, onClose }) => {
                                 required={true}
                                 value={phone}
                                 onChange={(e) => setphone(e.target.value)}
+                            />
+                            <input
+                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
+                                type="text"
+                                placeholder="Contact Name"
+                                required={true}
+                                value={contactName}
+                                onChange={(e) => setContactName(e.target.value)}
+                            />
+                            <input
+                                className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-4"
+                                type="text"
+                                placeholder="Company Address"
+                                required={true}
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
                             />
 
                             <input
@@ -157,7 +168,7 @@ const CompanyAdd = ({ open, onClose }) => {
 
                             <button onClick={handleAddCompany} className="mt-5 tracking-wide font-semibold bg-foreground-1 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                                 <FaArrowRight />
-                                <span className="ml-3"> {user?.company ? 'Update': 'Add' } </span>
+                                <span className="ml-3"> {user?.company ? 'Update' : 'Add'} </span>
                             </button>
                         </div>
                     </div>

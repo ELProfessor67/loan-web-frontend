@@ -1,9 +1,11 @@
 'use client';
 import AddMembers from '@/components/AddMembers';
+import AddSalesCompany from '@/components/AddSalesCompany';
 import AddVendorDialog from '@/components/AddVendorDialog';
 import CompanyAdd from '@/components/CompanyAdd';
+import NewAddVendorForn from '@/components/NewAddVendorForm';
 import ViewReason from '@/components/ViewResong';
-import { getAllCompanyRequest, getUserMemberRequest, getUserVendorRequest } from '@/http';
+import { getAllCompanyRequest, getAllSalesCompanyRequest, getUserMemberRequest, getUserVendorRequest } from '@/http';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import { useQuery } from 'react-query';
@@ -24,6 +26,7 @@ const page = () => {
     const [members, setMembers] = useState([]);
     const [memberOpen,setMemberOpen] = useState(false);
     const [companyOpen,setCompanyOpen] = useState(false);
+    const [salescompanyOpen,setSalesCompanyOpen] = useState(false);
 
 
     const getMembers = async () => {
@@ -43,6 +46,15 @@ const page = () => {
             return []
         }
     }
+    const getSalesCompany = async () => {
+        try {
+            const {data} = await getAllSalesCompanyRequest();
+  
+            return data.companies;
+        } catch (error) {
+            return []
+        }
+    }
 
     const getVendors = async () => {
         try {
@@ -55,6 +67,7 @@ const page = () => {
     const {data, isLoading} = useQuery('uservendor', getVendors)
     const {data:mdata, isLoading:misLoading} = useQuery('usermember', getMembers)
     const {data:cdata, isLoading:cisLoading} = useQuery('usercompany', getCompany)
+    const {data:sdata, isLoading:sisLoading} = useQuery('usersalescompany', getSalesCompany)
   
     
     
@@ -72,7 +85,7 @@ const page = () => {
                     <div className='min-h-screen'>
                         <div className='flex items-center justify-between'>
                             <h1>Vendor</h1>
-                            <div className='flex flex-row flex-wrap gap-4'>
+                            <div className='flex flex-row flex-wrap gap-4 justify-center items-center'>
                                 <div className="header-right-btn f-right d-lg-block">
                                     <button className="btn header-btn" onClick={() => setCompanyOpen(true)}>
                                         Add Company
@@ -86,6 +99,12 @@ const page = () => {
                                 <div className="header-right-btn f-right d-lg-block">
                                     <button className="btn header-btn" onClick={() => setMemberOpen(true)}>
                                         Add Vendor
+                                    </button>
+                                </div>
+
+                                <div className="header-right-btn f-right d-lg-block">
+                                    <button className="btn header-btn" onClick={() => setSalesCompanyOpen(true)}>
+                                        Add Sales Company
                                     </button>
                                 </div>
                             </div>
@@ -108,12 +127,8 @@ const page = () => {
                                             <th scope="col" class="px-6 py-3">
                                                 #
                                             </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Vendor Name
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Amount
-                                            </th>
+                                            
+                                          
                                             <th scope="col" class="px-6 py-3">
                                                 Sales
                                             </th>
@@ -134,14 +149,8 @@ const page = () => {
                                             data.length != 0 && getDataByStatus(status)?.map((vendor,i) => (
                                                 <tr class="bg-white border-b  " key={vendor._id}>
                                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                                                        {i+1}
+                                                        {vendor.dealId}
                                                     </th>
-                                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                                                        {vendor?.name}
-                                                    </th>
-                                                    <td class="px-6 py-4">
-                                                        ${vendor.amount}
-                                                    </td>
                                                     <td class="px-6 py-4">
                                                         ${vendor.sales.amount}
                                                     </td>
@@ -180,10 +189,12 @@ const page = () => {
                     </div>
                 </div>
             </div>
-            <AddVendorDialog open={addOpen} onClose={() => setAddOpen(false)} members={mdata} companies={cdata} setMemberOpen={setMemberOpen}/>
+            {/* <AddVendorDialog open={addOpen} onClose={() => setAddOpen(false)} members={mdata} companies={cdata} setMemberOpen={setMemberOpen}/> */}
+            <NewAddVendorForn open={addOpen} onClose={() => setAddOpen(false)} members={mdata} companies={cdata} setMemberOpen={setMemberOpen} salescompany={sdata}/>
             <ViewReason message={message} open={message} onClose={() => setMessage(null)}/>
             <AddMembers open={memberOpen} onClose={() => setMemberOpen(false)}/>
             <CompanyAdd open={companyOpen} onClose={() => setCompanyOpen(false)} />
+            <AddSalesCompany open={salescompanyOpen} onClose={() => setSalesCompanyOpen(false)}/>
         </>
 
     )

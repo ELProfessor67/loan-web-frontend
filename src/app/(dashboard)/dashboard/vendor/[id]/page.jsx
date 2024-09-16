@@ -5,10 +5,53 @@ import { getVendorDetailRequest } from "@/http";
 import { useQuery } from "react-query";
 
 
+const renderRow = (
+    vendorType,
+
+    state,
+    setState
+) => (
+    <tr key={vendorType} className={`border-b ${vendorType === 'SALES' || vendorType === 'OROFIT' ? 'bg-green-100' : 'bg-white'}`}>
+        <td className="border-r p-1 text-sm">{vendorType}</td>
+        <td className="border-r p-1 text-sm">
+            {state?.vendor?.name}
+        </td>
+        <td className="border-r p-1 text-sm">
+            <input type="text" className="w-full  px-1" readOnly value={state?.POnumber} />
+        </td>
+        <td className="border-r p-1 text-sm">
+            <input type="number" className="w-full  px-1" value={state?.amount} />
+        </td>
+        <td className="border-r p-1 text-sm">
+            {state?.attach && <a className="text-blue-500" href={`${BACKEND_URL}/${state?.attach}`}>OPEN</a>}
+        </td>
+        <td className="border-r p-1 text-sm">
+            <input type="text" className="w-full  px-1" readOnly value={state?.ship?.date} />
+        </td>
+        <td className="border-r p-1 text-sm">
+            {state?.ship?.file && <a className="text-blue-500" href={`${BACKEND_URL}/${state?.ship?.file}`}>OPEN</a>}
+        </td>
+        <td className="border-r p-1 text-sm">
+            <input type="text" className="w-full  px-1" readOnly value={state?.recieve?.date} />
+        </td>
+
+        <td className="border-r p-1 text-sm">
+            {state?.recieve?.file && <a className="text-blue-500" href={`${BACKEND_URL}/${state?.recieve?.file}`}>OPEN</a>}
+
+        </td>
+
+        <td className="border-r p-1 text-sm">
+            <input type="text" className="w-full  px-1" readOnly value={state?.tracking?.number} />
+        </td>
+        <td className="p-1 text-sm">
+             {state?.tracking?.link && <a className="text-blue-500" href={state?.tracking?.link}>OPEN</a>}
+          
+        </td>
+    </tr>
+)
 
 
-
-const page = ({params}) => {
+const page = ({ params }) => {
     const { id } = params;
 
     const getVendorDetail = async () => {
@@ -21,213 +64,60 @@ const page = ({params}) => {
     }
     const { data, isLoading } = useQuery(id, getVendorDetail)
 
-    if(isLoading){
-        return<h1>Loading...</h1>
+    if (isLoading) {
+        return <h1>Loading...</h1>
     }
 
     return (
         <>
             <div className="p-4 sm:ml-64">
                 <div className="p-4 rounded-lg ">
-                    <div className="max-w-4xl mx-auto p-4 bg-green-50">
-                        <h1 className="text-2xl font-bold text-center text-green-800 mb-4">DEAL {data?.dealId}</h1>
+                    <div className='min-h-screen'>
 
-                        <div className="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <h2 className="font-bold">{data?.company?.name}</h2>
-                                <p>{data?.company?.address}</p>
-                            
+                        <div className="p-4 bg-green-50 font-sans text-sm">
+                            <h1 className="text-2xl font-bold mb-4">DEAL {data?.dealId}</h1>
+                            <div className="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <h2 className="font-bold">{data?.company?.name}</h2>
+                                    <p>{data?.company?.address}</p>
+
+
+                                </div>
                             </div>
+                            <table className="w-full border-collapse border text-xs">
+                                <thead>
+                                    <tr className="bg-green-700 text-white">
+                                        <th className="border p-1">Vendor Type</th>
+                                        <th className="border p-1">Vendor Name</th>
+                                        <th className="border p-1">PO Number</th>
+                                        <th className="border p-1">Amount</th>
+                                        <th className="border p-1">Attach</th>
+                                        <th className="border p-1">Ship Date</th>
+                                        <th className="border p-1">attach</th>
+                                        <th className="border p-1">Received Date</th>
+                                        <th className="border p-1">attach</th>
+                                        <th className="border p-1">Tracking Number</th>
+                                        <th className="border p-1">Tracking Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {renderRow('mdse', data?.mdse)}
+                                    {renderRow('freight', data?.freight)}
+                                    {renderRow('freight2', data?.freight2)}
+                                    {renderRow('warehouse', data?.warehouse)}
+                                    {renderRow('serviceCharge', data?.serviceCharge)}
+                                    {renderRow('misc', data?.misc)}
+                                    {renderRow('sales', data?.sales)}
+                                    {renderRow('profit', data?.profit)}
+                                    {renderRow('Profit Return To Customer', data?.PRC)}
+
+                                </tbody>
+                            </table>
                         </div>
 
-                        <table className="w-full border-collapse">
-                            <thead>
-                                <tr className="bg-green-700 text-white text-xs">
-                                    <th className="border border-green-600 p-1">Day of Week</th>
-                                    <th className="border border-green-600 p-1">VENDOR</th>
-                                    <th className="border border-green-600 p-1">AMOUNT</th>
-                                    <th className="border border-green-600 p-1">SHIP DATE BY VENOR</th>
-                                    <th className="border border-green-600 p-1">RECIEVED DATE WHSE</th>
-                                    <th className="border border-green-600 p-1">RECIEVED BY SALES</th>
-                                    <th className="border border-green-600 p-1">Unpaid Leave</th>
-                                    <th className="border border-green-600 p-1">Other</th>
-                                    <th className="border border-green-600 p-1">TOTAL Hrs</th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-sm">
-                                <tr>
-                                    <td className="border border-green-300 p-1 font-bold">VENDOR</td>
-                                    <td className="border border-green-300 p-1">{data?.name}</td>
-                                    <td className="border border-green-300 p-1 text-right">{data?.amount}</td>
-                                    <td className="border border-green-300 p-1">{data?.dealDate}</td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1">
-                                    <a
-                                                target="_zeeshan"
-                                                href={`${BACKEND_URL}/${data?.copyOrderAttachment.file?.replace(/\\/g, '/')}`}
-                                                className="cursor-pointer text-blue-500 "
-                                                title="Copy Order Attachment "
-                                               
-                                            >
-                                                CPA
-                                            </a>
-                                    </td>
-                                    <td className="border border-green-300 p-1 text-right">{data?.amount}</td>
-                                </tr>
-                                <tr>
-                                    <td className="border border-green-300 p-1 font-bold">FREIGHT</td>
-                                    <td className="border border-green-300 p-1">{data?.freight?.companyName}</td>
-                                    <td className="border border-green-300 p-1 text-right">{data?.freight?.amount}</td>
-                                    <td className="border border-green-300 p-1">
-                                    <a
-                                                target="_zeeshan"
-                                                href={`${BACKEND_URL}/${data?.freight?.shipped?.file?.replace(/\\/g, '/')}`}
-                                                className="cursor-pointer text-blue-500 "
-                                                title="Copy Order Attachment "
-                                               
-                                            >
-                                                {data?.freight?.shipped?.date}
-                                            </a>
-                                    </td>
-                                    <td className="border border-green-300 p-1">
-                                    <a
-                                                target="_zeeshan"
-                                                href={`${BACKEND_URL}/${data?.freight?.recive?.file?.replace(/\\/g, '/')}`}
-                                                className="cursor-pointer text-blue-500 "
-                                                title="Copy Order Attachment "
-                                               
-                                            >
-                                                {data?.freight?.recive?.date}
-                                            </a>
-                                    </td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1 text-right"> {data?.freight?.amount}</td>
-                                </tr>
-                                <tr>
-                                    <td className="border border-green-300 p-1 font-bold">WAREHOUSE</td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1 text-right">{data?.warehouse?.amount}</td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1">
-                                    <a
-                                                target="_zeeshan"
-                                                href={`${BACKEND_URL}/${data?.warehouse?.file?.replace(/\\/g, '/')}`}
-                                                className="cursor-pointer text-blue-500 "
-                                                title="Warehouse Attachment "
-                                               
-                                            >
-                                                Attachment
-                                            </a>
-                                    </td>
-                                    <td className="border border-green-300 p-1 text-right">{data?.warehouse?.amount}</td>
-                                </tr>
-                                <tr>
-                                    <td className="border border-green-300 p-1 font-bold">SALES</td>
-                                    <td className="border border-green-300 p-1">{data?.sales?.companyName}</td>
-                                    <td className="border border-green-300 p-1 text-right">{data?.sales?.amount}</td>
-                                    <td className="border border-green-300 p-1">
-                                    <a
-                                                target="_zeeshan"
-                                                href={`${BACKEND_URL}/${data?.freight?.shipped?.file?.replace(/\\/g, '/')}`}
-                                                className="cursor-pointer text-blue-500 "
-                                                title="Copy Order Attachment "
-                                               
-                                            >
-                                                {data?.freight?.shipped?.date}
-                                            </a>
-                                    </td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1 text-right"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1 text-right">{data?.sales?.amount}</td>
-                                </tr>
-                                <tr>
-                                    <td className="border border-green-300 p-1 font-bold">SET AMOUT PAID</td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1 text-right"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1 text-right">3,000.00</td>
-                                </tr>
-                                <tr>
-                                    <td className="border border-green-300 p-1 font-bold">OROFIT</td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1 text-right">{data?.profit?.amount}</td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1 text-right">{data?.profit?.amount}</td>
-                                </tr>
-                                <tr>
-                                    <td className="border border-green-300 p-1 font-bold">#VALUE!</td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1"></td>
-                                    <td className="border border-green-300 p-1 text-right">0.00</td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr className="bg-green-100">
-                                    <td className="border border-green-300 p-1 font-bold">Total Hrs:</td>
-                                    <td className="border border-green-300 p-1 text-right">0.00</td>
-                                    <td className="border border-green-300 p-1 text-right">{Number(data?.amount || 0)+Number(data?.freight?.amount || 0)+Number(data?.sales?.amount || 0)+Number(data?.warehouse?.amount || 0)+Number(data?.profit?.amount || 0)}</td>
-                                    <td className="border border-green-300 p-1 text-right">0.00</td>
-                                    <td className="border border-green-300 p-1 text-right">0.00</td>
-                                    <td className="border border-green-300 p-1 text-right">0.00</td>
-                                    <td className="border border-green-300 p-1 text-right">0.00</td>
-                                    <td className="border border-green-300 p-1 text-right">0.00</td>
-                                    <td className="border border-green-300 p-1 text-right font-bold">{Number(data?.amount || 0)+Number(data?.freight?.amount || 0)+Number(data?.sales?.amount || 0)+Number(data?.warehouse?.amount || 0)+Number(data?.profit?.amount || 0)}</td>
-                                </tr>
-                                <tr>
-                                    <td className="border border-green-300 p-1 font-bold">Rate/Hour:</td>
-                                    <td className="border border-green-300 p-1 text-right">15.00</td>
-                                    <td className="border border-green-300 p-1 text-right">23.00</td>
-                                    <td className="border border-green-300 p-1 text-right">15.00</td>
-                                    <td className="border border-green-300 p-1 text-right">15.00</td>
-                                    <td className="border border-green-300 p-1 text-right">15.00</td>
-                                    <td className="border border-green-300 p-1 text-right">0.00</td>
-                                    <td className="border border-green-300 p-1 text-right">0.00</td>
-                                    <td className="border border-green-300 p-1"></td>
-                                </tr>
-                                <tr>
-                                    <td className="border border-green-300 p-1 font-bold">Total Pay:</td>
-                                    <td className="border border-green-300 p-1 text-right">0.00</td>
-                                    <td className="border border-green-300 p-1 text-right">#########</td>
-                                    <td className="border border-green-300 p-1 text-right">0.00</td>
-                                    <td className="border border-green-300 p-1 text-right">0.00</td>
-                                    <td className="border border-green-300 p-1 text-right">#########</td>
-                                    <td className="border border-green-300 p-1 text-right">0.00</td>
-                                    <td className="border border-green-300 p-1 text-right">0.00</td>
-                                    <td className="border border-green-300 p-1 text-right font-bold">#########</td>
-                                </tr>
-                            </tfoot>
-                        </table>
-
-                        <div className="mt-4 text-sm">
-                            <p>Total Hours Reported: 74,159.00</p>
-                            <p>Total Pay: #########</p>
-                        </div>
                     </div>
                 </div>
-            </div>
-
+            </div >
         </>
 
     )
