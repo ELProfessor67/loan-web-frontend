@@ -15,8 +15,8 @@ const Header = () => {
                                     {/* Logo */}
                                     <div className="col-xl-2 col-lg-2 col-md-1">
                                         <div className="logo">
-                                            <a href="index.html">
-                                                <img src="assets/img/logo/logo.png" alt="" />
+                                            <a href="/">
+                                                <img src="assets/img/logo/logo.png" alt="" className='w-[8rem]'/>
                                             </a>
                                         </div>
                                     </div>
