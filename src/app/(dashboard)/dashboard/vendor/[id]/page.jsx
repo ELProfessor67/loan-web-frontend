@@ -20,7 +20,7 @@ const renderRow = (
             <input type="text" className="w-full  px-1" readOnly value={state?.POnumber} />
         </td>
         <td className="border-r p-1 text-sm">
-            <input type="number" className="w-full  px-1" value={state?.amount} />
+            <input type="text" className="w-full  px-1" value={state?.amount} />
         </td>
         <td className="border-r p-1 text-sm">
             {state?.attach && <a className="text-blue-500" href={`${BACKEND_URL}/${state?.attach}`}>OPEN</a>}
@@ -72,7 +72,7 @@ const page = ({ params }) => {
         <>
             <div className="p-4 sm:ml-64">
                 <div className="p-4 rounded-lg ">
-                    <div className='min-h-screen'>
+                    <div className='h-fit'>
 
                         <div className="p-4 bg-green-50 font-sans text-sm">
                             <h1 className="text-2xl font-bold mb-4">DEAL {data?.dealId}</h1>

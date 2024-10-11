@@ -14,6 +14,8 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen ,sa
     const {user} = useContext(UserContext)
     const queryClient = useQueryClient()
     const [loading, setLoading] = useState(false);
+    const [serviceChargeAmount,setServiceChargeAmount] = useState(0);
+    const [message,setMessage] = useState(null);
     const [mdse,setmdse] = useState({
         vendor: '',
         POnumber: '',
@@ -176,7 +178,8 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen ,sa
           number: ''
         }
     })
-    const [dealId, setdealId] = useState(0)
+    const [dealId, setdealId] = useState(0);
+
     
 
 
@@ -619,11 +622,81 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen ,sa
         }
     }
 
+
+
+    //get service charge
+    useEffect(() => {
+      const getServiceCharge = async () => {
+        try {
+            const res = await getServiceChargeRequest();
+            setServiceChargeAmount(res.data.serviceCharge)
+            // setserviceCharge(prev => ({...prev,amount: `${res.data.serviceCharge}%`}));
+        } catch (error) {
+          console.log('Error while getting serviec charge')
+        }
+      }
+      getServiceCharge()
+    },[]);
+
+
+
+
+
+
+    useEffect(() => {
+      // profit = total cost - renvenue
+
+      const totalCost = Number(mdse.amount || 0) + Number(freight.amount || 0) + Number(freight2.amount || 0) + Number(warehouse.amount || 0) + Number(misc.amount || 0);
+      const revenue = Number(sales.amount || 0);
+      
+      if (totalCost > 0 && revenue > 0) {
+          const Totalprofit = revenue - totalCost;
+          const profitPercentage = (Totalprofit / revenue) * 100;
+          console.log(totalCost, revenue, profitPercentage);
+          
+          // Set profit in state with two decimal places
+          setprofit(prev => ({
+              ...prev,
+              amount: `${Totalprofit.toFixed(2)} | ${profitPercentage.toFixed(2)}%`
+          }));
+          
+          let totalCharge;
+
+          if (profitPercentage <= 40) {
+              const assumedProfit = (revenue * 40) / 100;
+              totalCharge = (Number(serviceChargeAmount) / 100) * assumedProfit;
+              setserviceCharge(prev => ({
+                  ...prev,
+                  amount: `${totalCharge.toFixed(2)} | ${serviceChargeAmount}%`
+              }));
+              setMessage(`Your profit is ${profitPercentage.toFixed(2)} percent. We charge service charges according to 40 percent, so the amount according to 40 percent will be ${totalCharge.toFixed(2)}.`);
+          } else {
+              totalCharge = (Number(serviceChargeAmount) / 100) * Totalprofit;
+              setserviceCharge(prev => ({
+                  ...prev,
+                  amount: `${totalCharge.toFixed(2)} | ${serviceChargeAmount}%`
+              }));
+              setMessage(null);
+          }
+
+          //calculate return to customer
+          const returnToCustomerProfit = Totalprofit - totalCharge;
+          const returnToCustomerProfitPercentage = (returnToCustomerProfit / revenue) * 100;
+          setPRC(prev => ({...prev,amount: `${returnToCustomerProfit} | ${returnToCustomerProfitPercentage?.toFixed(2)}%`}));
+      }
+
+
+
+  }, [mdse,freight,freight2,warehouse,misc,sales,serviceChargeAmount]);
+
+
+
     const renderRow = (
         vendorType,
         vendorOptions,
         state,
-        setState
+        setState,
+        isEdittable=true
     ) => (
         <tr key={vendorType} className={`border-b ${vendorType === 'SALES' || vendorType === 'OROFIT' ? 'bg-green-100' : 'bg-white'}`}>
             <td className="border-r p-1 text-sm">{vendorType}</td>
@@ -636,10 +709,10 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen ,sa
                 </select>
             </td>
             <td className="border-r p-1 text-sm">
-                <input type="text" className="w-full  px-1" value={state.POnumber} onChange={(e) => handlePONumberChange(setState,e.target.value)}/>
+                <input type="text" className="w-full  px-1" value={state.POnumber} onChange={(e) => handlePONumberChange(setState,e.target.value)} readOnly={!isEdittable}/>
             </td>
             <td className="border-r p-1 text-sm">
-                <input type="number" className="w-full  px-1" value={state.amount} onChange={(e) => handleAmountChange(setState,e.target.value)} />
+                <input type={isEdittable ? "number": "text"} className="w-full  px-1" value={state.amount} onChange={(e) => handleAmountChange(setState,e.target.value)}  readOnly={!isEdittable}/>
             </td>
             <td className="border-r p-1 text-sm">
                 <label htmlFor={`file-${vendorType}`} className="cursor-pointer text-blue-600 hover:underline text-sm">
@@ -650,10 +723,10 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen ,sa
                     type="file"
                     className="hidden"
                     onChange={(e) => handleAttachFileChange(e, setState)}
-                />
+                 readOnly={!isEdittable}/>
             </td>
             <td className="border-r p-1 text-sm">
-                <input type="text" className="w-full  px-1" value={state.ship?.date} onChange={(e) => handleShipDateChange(setState,e.target.value)} />
+                <input type="text" className="w-full  px-1" value={state.ship?.date} onChange={(e) => handleShipDateChange(setState,e.target.value)}  readOnly={!isEdittable}/>
             </td>
             <td className="border-r p-1 text-sm">
                 <label htmlFor={`ship-${vendorType}`} className="cursor-pointer text-blue-600 hover:underline text-sm">
@@ -664,10 +737,10 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen ,sa
                     type="file"
                     className="hidden"
                     onChange={(e) => handleShipAttachFileChange(e, setState)}
-                />
+                 readOnly={!isEdittable}/>
             </td>
             <td className="border-r p-1 text-sm">
-            <input type="text" className="w-full  px-1"  value={state.recieve?.date} onChange={(e) => handleRecieveDateChange(setState,e.target.value)}/>
+            <input type="text" className="w-full  px-1"  value={state.recieve?.date} onChange={(e) => handleRecieveDateChange(setState,e.target.value)} readOnly={!isEdittable}/>
             </td>
 
             <td className="border-r p-1 text-sm">
@@ -679,14 +752,14 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen ,sa
                     type="file"
                     className="hidden"
                     onChange={(e) => handleRecieveAttachFileChange(e, setState)}
-                />
+                 readOnly={!isEdittable}/>
             </td>
 
             <td className="border-r p-1 text-sm">
-                <input type="text" className="w-full  px-1" value={state.tracking?.number} onChange={(e) => handleTrackingNUmberChange(setState,e.target.value)}/>
+                <input type="text" className="w-full  px-1" value={state.tracking?.number} onChange={(e) => handleTrackingNUmberChange(setState,e.target.value)} readOnly={!isEdittable}/>
             </td>
             <td className="p-1 text-sm">
-                <input type="text" className="w-full  px-1" value={state.tracking?.link} onChange={(e) => handleTrackingLinkChange(setState,e.target.value)} placeholder="Tracking Link" />
+                <input type="text" className="w-full  px-1" value={state.tracking?.link} onChange={(e) => handleTrackingLinkChange(setState,e.target.value)} placeholder="Tracking Link"  readOnly={!isEdittable}/>
             </td>
         </tr>
     )
@@ -729,14 +802,22 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen ,sa
                                 {renderRow('freight', members,freight,setfreight)}
                                 {renderRow('freight2', members,freight2,setfreight2)}
                                 {renderRow('warehouse', members,warehouse,setwarehouse)}
-                                {/* {renderRow('serviceCharge', members,serviceCharge,setserviceCharge)} */}
                                 {renderRow('misc', members,misc,setmisc)}
                                 {renderRow('sales', salescompany,sales,setsales)}
-                                {renderRow('profit', members,profit,setprofit)}
-                                {renderRow('Profit Return To Customer', members,PRC,setPRC )}
+                                {renderRow('profit', members,profit,setprofit,false)}
+                                {renderRow('serviceCharge', members,serviceCharge,setserviceCharge,false)}
+                                {renderRow('Profit Return To Customer', members,PRC,setPRC,false )}
                               
                             </tbody>
                         </table>
+
+                        {
+                          message &&
+                          <p className='flex text-sm mt-2'>
+                            <b className='whitespace-pre mr-1'>Note :</b>
+                            {message}
+                          </p>
+                        }
 
                         <div className='flex justify-center py-3'>
                             <button onClick={handleSubmit} className='py-2 px-4 rounded-md bg-blue-1'>{loading ? 'Loading...': 'SUBMIT'}</button>

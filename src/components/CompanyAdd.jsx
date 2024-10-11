@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { IoMdClose } from "react-icons/io";
 import Stepper from './Stepper';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
-import { addUserCompanyRequest, addUserMemberRequest, addVendorRequest, getServiceChargeRequest } from '@/http';
+import { addCompanyRequest } from '@/http';
 import { toast } from 'react-toastify';
 import { useQueryClient } from 'react-query';
 import { UserContext } from '@/providers/UserProvider';
@@ -20,7 +20,7 @@ const CompanyAdd = ({ open, onClose }) => {
     const [contactName, setContactName] = useState('');
 
 
-    const { user } = useContext(UserContext);
+    const { user,loadUser } = useContext(UserContext);
 
     useEffect(() => {
         if (user && user.company) {
@@ -61,7 +61,8 @@ const CompanyAdd = ({ open, onClose }) => {
             formData.append('email', email);
 
 
-            const { data } = await addUserCompanyRequest(formData);
+            const { data } = await addCompanyRequest(formData);
+            await loadUser()
             queryClient.invalidateQueries('usercompany');
             setLoading(false)
             onClose()

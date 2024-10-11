@@ -28,7 +28,7 @@ export const UserProvider = ({children}) => {
         loadUser()
     },[])
 
-    return<UserContext.Provider value={{isAuth,setIsAuth,user,setUser,isLoading,setIsLoading}}>
+    return<UserContext.Provider value={{isAuth,setIsAuth,user,setUser,isLoading,setIsLoading,loadUser}}>
         {children}
     </UserContext.Provider>
 }

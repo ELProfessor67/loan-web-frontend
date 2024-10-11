@@ -6,6 +6,11 @@ import React, { useEffect, useState } from 'react'
 import { useQuery } from 'react-query';
 
 
+function TotalCostCalulator(deal){
+    const totalCost = Number(deal?.mdse?.amount || 0) + Number(deal?.freight?.amount || 0) + Number(deal?.freight2?.amount || 0) + Number(deal?.warehouse?.amount || 0) + Number(deal?.misc?.amount || 0);
+    return totalCost;
+}
+
 
 const Tags = [
     ['Pending','pending'],
@@ -59,13 +64,13 @@ const page = () => {
                                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
                                         <tr>
                                             <th scope="col" class="px-6 py-3">
-                                                Vendor Name
+                                               Deal Id
                                             </th>
                                             <th scope="col" class="px-6 py-3">
-                                                Amount
+                                                Total Cost
                                             </th>
                                             <th scope="col" class="px-6 py-3">
-                                                Sales
+                                                Revenue/Sales
                                             </th>
                                             <th scope="col" class="px-6 py-3">
                                                 Profit
@@ -84,10 +89,10 @@ const page = () => {
                                             data.length != 0 && getDataByStatus(status)?.map((vendor) => (
                                                 <tr class="bg-white border-b  ">
                                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                                                        {vendor?.name}
+                                                        {vendor?.dealId}
                                                     </th>
                                                     <td class="px-6 py-4">
-                                                        ${vendor.amount}
+                                                        ${TotalCostCalulator(vendor)}
                                                     </td>
                                                     <td class="px-6 py-4">
                                                         ${vendor.sales.amount}
