@@ -3,140 +3,66 @@ import React from 'react'
 const Footer = () => {
     return (
         <>
-            <footer>
-                {/* Footer Start*/}
-                <div className="footer-area">
-                    <div className="container">
-                        <div className="footer-top footer-padding">
-                            <div className="row justify-content-between">
-                                <div className="col-xl-3 col-lg-4 col-md-4 col-sm-6">
-                                    <div className="single-footer-caption mb-50">
-                                        <div className="single-footer-caption mb-30">
-                                            {/* logo */}
-                                            <div className="footer-logo">
-                                                <a href="index.html">
-                                                    <img src="/assets/img/logo/logo2_footer.png" alt="" />
-                                                </a>
-                                            </div>
-                                            <div className="footer-pera">
-                                                <p>
-                                                    Heaven fruitful doesn't over lesser days appear creeping
-                                                    seasons so behold bearing
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-xl-2 col-lg-2 col-md-4 col-sm-6">
-                                    <div className="single-footer-caption mb-50">
-                                        <div className="footer-tittle">
-                                            <h4>Quick Link</h4>
-                                            <ul>
-                                                <li>
-                                                    <a href="#">About</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Offers &amp; Discounts</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Get Coupon</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#"> Contact Us</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-                                    <div className="single-footer-caption mb-50">
-                                        <div className="footer-tittle">
-                                            <h4>New Products</h4>
-                                            <ul>
-                                                <li>
-                                                    <a href="#">Woman Cloth</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Fashion Accessories</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Man Accessories</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Rubber made Toys</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                                    <div className="single-footer-caption mb-50">
-                                        <div className="footer-tittle">
-                                            <h4>Support</h4>
-                                            <ul>
-                                                <li>
-                                                    <a href="#">Frequently Asked Questions</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Terms &amp; Conditions</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#"> Privacy Policy</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Report a Payment Issue</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+            <footer className="bg-[#0a1f44] text-white py-12 px-4 md:px-8">
+                <div className="max-w-7xl mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                        <div>
+                            <h2 className="font-bold text-lg mb-4 text-white">SERVICES</h2>
+                            <ul className="space-y-2 text-sm">
+                                <li><a href="#" className="hover:underline">Accounts Receivable Financing</a></li>
+                                <li><a href="#" className="hover:underline">Invoice Factoring</a></li>
+                                <li><a href="#" className="hover:underline">Loan Workouts</a></li>
+                                <li><a href="#" className="hover:underline">Payroll Funding</a></li>
+                                <li><a href="#" className="hover:underline">Purchase Order Financing</a></li>
+                                <li><a href="#" className="hover:underline">Tax Lien Resolution</a></li>
+                            </ul>
                         </div>
-                        <div className="footer-bottom">
-                            <div className="row d-flex justify-content-between align-items-center">
-                                <div className="col-xl-9 col-lg-8">
-                                    <div className="footer-copy-right">
-                                        <p>
-                                            {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
-                                            Copyright © All rights reserved | This template is made with{" "}
-                                            <i className="fa fa-heart" aria-hidden="true" /> by{" "}
-                                            <a href="https://colorlib.com" target="_blank">
-                                                Colorlib
-                                            </a>
-                                            {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="col-xl-3 col-lg-4">
-                                    {/* Footer Social */}
-                                    <div className="footer-social f-right">
-                                        <a href="#">
-                                            <i className="fab fa-twitter" />
-                                        </a>
-                                        <a href="#">
-                                            <i className="fab fa-facebook-f" />
-                                        </a>
-                                        <a href="#">
-                                            <i className="fas fa-globe" />
-                                        </a>
-                                        <a href="#">
-                                            <i className="fab fa-instagram" />
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                        <div>
+                            <h2 className="font-bold text-lg mb-4 text-white">RESOURCES</h2>
+                            <ul className="space-y-2 text-sm">
+                                <li><a href="#" className="hover:underline">Invoice Factoring Rates</a></li>
+                                <li><a href="#" className="hover:underline">FAQs</a></li>
+                                <li><a href="#" className="hover:underline">Financial Calculators</a></li>
+                                <li><a href="#" className="hover:underline">How Invoice Factoring Works</a></li>
+                                <li><a href="#" className="hover:underline">Insights Blog</a></li>
+                                <li><a href="#" className="hover:underline">QuickBooks Reconciliation</a></li>
+                                <li><a href="#" className="hover:underline">What Does a Factoring Company Do?</a></li>
+                                <li><a href="#" className="hover:underline">White Papers</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h2 className="font-bold text-lg mb-4 text-white">PARTNER WITH US</h2>
+                            <ul className="space-y-2 text-sm">
+                                <li><a href="#" className="hover:underline">Broker Referral Program</a></li>
+                                <li><a href="#" className="hover:underline">Careers</a></li>
+                                <li><a href="#" className="hover:underline">Company Reviews</a></li>
+                                <li><a href="#" className="hover:underline">Industries We Serve</a></li>
+                                <li><a href="#" className="hover:underline">What is a Factoring Company</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h2 className="font-bold text-lg mb-4 text-white">COMPANY INFO</h2>
+                            <ul className="space-y-2 text-sm">
+                                <li><a href="#" className="hover:underline">About Us</a></li>
+                                <li><a href="#" className="hover:underline">Careers</a></li>
+                                <li><a href="#" className="hover:underline">Insights Blog</a></li>
+                                <li><a href="#" className="hover:underline">Our Team</a></li>
+                                <li><a href="#" className="hover:underline">Contact Us</a></li>
+                            </ul>
+                            <h2 className="font-bold text-lg mt-6 mb-4">CUSTOMERS</h2>
+                            <ul className="space-y-2 text-sm">
+                                <li><a href="#" className="hover:underline">eFactor Login</a></li>
+                            </ul>
                         </div>
                     </div>
+                    <div className="border-t border-gray-700 pt-8 text-center">
+                        <img src="/assets/img/logo/logo.png" alt="Universal Funding Corporation" className="mx-auto mb-4 h-12 w-auto" />
+                        <p className="text-xs">
+                            Copyright © 2009-{new Date().getFullYear()} Universal Funding Corporation and its related entities. All rights reserved.
+                        </p>
+                    </div>
                 </div>
-                {/* Footer End*/}
             </footer>
-            {/* Scroll Up */}
-            <div id="back-top">
-                <a title="Go to Top" href="#">
-                    {" "}
-                    <i className="fas fa-level-up-alt" />
-                </a>
-            </div>
         </>
     )
 }

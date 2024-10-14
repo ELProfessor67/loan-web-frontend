@@ -1,582 +1,265 @@
-import React from 'react'
+'use client'
+import { CiMedal } from "react-icons/ci";
+import { BsBuilding } from "react-icons/bs";
+import { FiUsers } from "react-icons/fi";
+import { IoThumbsUpOutline } from "react-icons/io5";
+import { FaCog, FaPrint, FaOilCan, FaUsers, FaTshirt, FaShieldAlt, FaWarehouse, FaHeadset, FaTruck, FaMicrochip, FaEllipsisH } from "react-icons/fa";
+import { toast } from 'react-toastify';
+import { useState } from 'react';
+import { sendEmailRequest } from "@/http";
+
+
+
+const industries = [
+    { icon: FaCog, label: "Manufacturing", color: "text-orange-500" },
+    { icon: FaUsers, label: "Staffing", color: "text-orange-500" },
+    { icon: FaWarehouse, label: "Wholesale / Distribution", color: "text-orange-500" },
+    { icon: FaTruck, label: "Transportation", color: "text-orange-500" },
+    { icon: FaPrint, label: "Printing", color: "text-orange-500" },
+    { icon: FaTshirt, label: "Apparel", color: "text-orange-500" },
+    { icon: FaHeadset, label: "Business Services", color: "text-orange-500" },
+    { icon: FaMicrochip, label: "Technology", color: "text-orange-500" },
+    { icon: FaOilCan, label: "Oil Field", color: "text-orange-500" },
+    { icon: FaShieldAlt, label: "Security", color: "text-orange-500" },
+    { icon: FaEllipsisH, label: "More", color: "text-orange-500" },
+];
 
 const page = () => {
-    return (
-        <section>
-            <main>
-                {/* slider Area Start*/}
-                <div
-                    className="slider-area slider-height"
-                    data-background="/assets/img/hero/h1_hero.jpg"
-                >
-                    <div className="slider-active">
+    const [email, setEmail] = useState('');
+    const [subject, setSubject] = useState('');
+    const [message, setMessage] = useState('');
+    const [name, setName] = useState('');
+    const [loading, setLoading] = useState(false);
 
-                        <div className="single-slider">
-                            <div className="slider-cap-wrapper">
-                                <div className="hero__caption">
-                                    <p data-animation="fadeInLeft" data-delay=".2s">
-                                        Achieve your financial goal
-                                    </p>
-                                    <h1 data-animation="fadeInLeft" data-delay=".5s">
-                                        Small Business Loans For Daily Expenses.
-                                    </h1>
-                                    {/* Hero Btn */}
-                                    <a
-                                        href="apply.html"
-                                        className="btn hero-btn"
-                                        data-animation="fadeInLeft"
-                                        data-delay=".8s"
-                                    >
-                                        Apply for Loan
-                                    </a>
-                                </div>
-                                <div className="hero__img">
-                                    <img src="/assets/img/hero/hero_img2.jpg" alt="" />
-                                </div>
-                            </div>
-                        </div>
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            setLoading(true);
+            await sendEmailRequest({email, subject, message, name});
+            toast.success('Email sent successfully');
+        } catch (error) {
+            toast.error('Failed to send email');
+        }finally{
+            setEmail('');
+            setSubject('');
+            setMessage('');
+            setName('');
+            setLoading(false);
+        }
+    };
+
+    return (
+        <>
+            <div className="min-h-screen bg-gradient-to-b from-white to-blue-100">
+                <main className="container mx-auto px-4 py-5 md:py-24 flex flex-col md:flex-row items-center">
+                    <div className="md:w-1/2 mb-8 md:mb-0">
+                        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                            Turn Your Unpaid <br />
+                            Invoices Into <span className="text-blue-600">Cash.</span>
+                        </h1>
+                        <p className="text-xl text-gray-600 mb-6">
+                            Apply now and get funded within 24 hours of approval.
+                        </p>
+                        <ul className="space-y-2 w-[80%] flex flex-wrap gap-3 items-center justify-between">
+                            <li className="flex items-center text-xl font-medium">
+                                <span className="text-orange-500 mr-2 text-2xl">%</span>
+                                Rates as low as .55%
+                            </li>
+                            <li className="flex items-center text-xl font-medium">
+                                <span className="text-orange-500 mr-2 text-2xl">⏱</span>
+                                Apply in minutes
+                            </li>
+                            <li className="flex items-center text-xl font-medium">
+                                <span className="text-orange-500 mr-2 text-2xl">✓</span>
+                                No hidden fees
+                            </li>
+                            <li className="flex items-center text-xl font-medium">
+                                <span className="text-orange-500 mr-2 text-2xl">✓</span>
+                                Easy direct deposit
+                            </li>
+                        </ul>
                     </div>
-                    {/* slider-footer Start */}
-                    <div className="slider-footer section-bg d-none d-sm-block">
-                        <div className="footer-wrapper">
-                            {/* single */}
-                            <div className="single-caption">
-                                <div className="single-img">
-                                    <img src="/assets/img/hero/hero_footer.png" alt="" />
-                                </div>
-                            </div>
-                            {/* single */}
-                            <div className="single-caption">
-                                <div className="caption-icon">
-                                    <span className="flaticon-clock" />
-                                </div>
-                                <div className="caption">
-                                    <p>Quick &amp; Easy Loan</p>
-                                    <p>Approvals</p>
-                                </div>
-                            </div>
-                            {/* single */}
-                            <div className="single-caption">
-                                <div className="caption-icon">
-                                    <span className="flaticon-like" />
-                                </div>
-                                <div className="caption">
-                                    <p>Quick &amp; Easy Loan</p>
-                                    <p>Approvals</p>
-                                </div>
-                            </div>
-                            {/* single */}
-                            <div className="single-caption">
-                                <div className="caption-icon">
-                                    <span className="flaticon-money" />
-                                </div>
-                                <div className="caption">
-                                    <p>Quick &amp; Easy Loan</p>
-                                    <p>Approvals</p>
-                                </div>
-                            </div>
-                        </div>
+
+                    <div className="md:w-1/2 bg-[#1e2a4a] text-white p-8 rounded-lg">
+                        <h2 className="text-sm font-semibold mb-2 text-center text-white">
+                            COMPLETE THIS FORM TO GET YOUR
+                        </h2>
+                        <h3 className="text-lg font-semibold mb-4 text-center text-white">
+                            PERSONALIZED RATE INFORMATION
+                        </h3>
+                        <h4 className="text-3xl font-bold mb-6 text-center text-white">Get My Rate Now</h4>
+                        <form className="space-y-4" onSubmit={handleSubmit}>
+                            <input type="text" placeholder="Full Name*" className="w-full p-3 rounded text-black" value={name} onChange={(e) => setName(e.target.value)} />
+                            <input type="email" placeholder="Email Address*" className="w-full p-3 rounded text-black" value={email} onChange={(e) => setEmail(e.target.value)} />
+                            <input type="text" placeholder="Subject" className="w-full p-3 rounded text-black" value={subject} onChange={(e) => setSubject(e.target.value)} />
+                            <textarea placeholder="Message" className="w-full h-32 p-3 rounded text-black" value={message} onChange={(e) => setMessage(e.target.value)}></textarea>
+                            <button type="submit" className="w-full bg-green-500 text-white font-bold py-3 rounded hover:bg-green-600 transition-colors">
+                               {loading ? 'Sending...' : 'Send Message'}
+                            </button>
+                        </form>
                     </div>
-                    {/* slider-footer End */}
-                </div>
-                {/* slider Area End*/}
-                {/* About Law Start*/}
-                <div className="about-low-area section-padding2">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-lg-6 col-md-12">
-                                <div className="about-caption mb-50">
-                                    {/* Section Tittle */}
-                                    <div className="section-tittle mb-35">
-                                        <span>About Our Company</span>
-                                        <h2>
-                                            Building a Brighter financial Future &amp; Good Support.
-                                        </h2>
-                                    </div>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                                        oeiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                                        eniminixm, quis nostrud exercitation ullamco laboris nisi ut
-                                        aliquip exeaoauat. Duis aute irure dolor in reprehe.
-                                    </p>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                                        oeiusmod tempor incididunt ut labore et dolore magna aliq.
-                                    </p>
-                                    <a href="apply.html" className="btn">
-                                        Apply for Loan
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-12">
-                                {/* about-img */}
-                                <div className="about-img ">
-                                    <div className="about-font-img d-none d-lg-block">
-                                        <img src="/assets/img/gallery/about2.png" alt="" />
-                                    </div>
-                                    <div className="about-back-img ">
-                                        <img src="/assets/img/gallery/about1.png" alt="" />
-                                    </div>
-                                </div>
-                            </div>
+                </main>
+            </div>
+
+            <div className="bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+                {/* Stats Section */}
+                <div className="bg-slate-600 rounded-lg p-4 mb-8">
+                    <div className="flex flex-wrap justify-between text-white text-center">
+                        <div className="w-1/2 sm:w-1/4 mb-4 sm:mb-0 flex flex-col items-center gap-2">
+                            <span><CiMedal size={50} /></span>
+                            <p className=" sm:text-sm font-semibold text-white text-xl">Best Factoring<br />Company of 2021</p>
+                        </div>
+                        <div className="w-1/2 sm:w-1/4 mb-4 sm:mb-0 flex flex-col items-center gap-2">
+                            <span><BsBuilding size={50} /></span>
+                            <p className=" sm:text-sm font-semibold text-white text-xl">$2 Billion+ Funded<br />for Company Growth</p>
+                        </div>
+                        <div className="w-1/2 sm:w-1/4 flex flex-col items-center gap-2">
+                            <span><FiUsers size={50} /></span>
+                            <p className=" sm:text-sm font-semibold text-white text-xl">3,000+<br />Satisfied Clients</p>
+                        </div>
+                        <div className="w-1/2 sm:w-1/4 flex flex-col items-center gap-2">
+                            <span><IoThumbsUpOutline size={50} /></span>
+                            <p className=" sm:text-sm font-semibold text-white tex">A+ Rating Better<br />Business Bureau</p>
                         </div>
                     </div>
                 </div>
-                {/* About Law End*/}
-                {/* Services Area Start */}
-                <div
-                    className="services-area pt-150 pb-150"
-                    data-background="/assets/img/gallery/section_bg02.jpg"
-                >
-                    <div className="container">
-                        <div className="row justify-content-center">
-                            <div className="col-lg-6 col-md-10">
-                                {/* Section Tittle */}
-                                <div className="section-tittle text-center mb-80">
-                                    <span>Services that we are providing</span>
-                                    <h2>High Performance Services For All Industries.</h2>
-                                </div>
+
+                {/* Main Content */}
+                <div className="max-w-5xl mx-auto">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8">
+                        Are your receivables building<br className="hidden sm:inline" />
+                        up, but <span className="text-blue-600">your cash flow is tight?</span>
+                    </h2>
+
+                    <div className="flex flex-col md:flex-row gap-8 items-start">
+                        {/* Video Section */}
+                        <div className="w-full md:w-1/2">
+                            <div className="relative pb-[56.25%]">
+                                <iframe
+                                    className="absolute top-0 left-0 w-full h-full"
+                                    src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                                    title="Universal Funding: Need Working Capital Fast?"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-lg-3 col-md-6 col-sm-6">
-                                <div className="single-cat text-center mb-50">
-                                    <div className="cat-icon">
-                                        <span className="flaticon-work" />
-                                    </div>
-                                    <div className="cat-cap">
-                                        <h5>
-                                            <a href="services.html">Business Loan</a>
-                                        </h5>
-                                        <p>
-                                            Consectetur adipisicing elit, sed doeiusmod tempor incididunt
-                                            ut labore et dolore
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-6 col-sm-6">
-                                <div className="single-cat text-center mb-50">
-                                    <div className="cat-icon">
-                                        <span className="flaticon-loan" />
-                                    </div>
-                                    <div className="cat-cap">
-                                        <h5>
-                                            <a href="services.html">Commercial Loans</a>
-                                        </h5>
-                                        <p>
-                                            Consectetur adipisicing elit, sed doeiusmod tempor incididunt
-                                            ut labore et dolore
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-6 col-sm-6">
-                                <div className="single-cat text-center mb-50">
-                                    <div className="cat-icon">
-                                        <span className="flaticon-loan-1" />
-                                    </div>
-                                    <div className="cat-cap">
-                                        <h5>
-                                            <a href="services.html">Construction Loans</a>
-                                        </h5>
-                                        <p>
-                                            Consectetur adipisicing elit, sed doeiusmod tempor incididunt
-                                            ut labore et dolore
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-6 col-sm-6">
-                                <div className="single-cat text-center mb-50">
-                                    <div className="cat-icon">
-                                        <span className="flaticon-like" />
-                                    </div>
-                                    <div className="cat-cap">
-                                        <h5>
-                                            <a href="services.html">Business Loan</a>
-                                        </h5>
-                                        <p>
-                                            Consectetur adipisicing elit, sed doeiusmod tempor incididunt
-                                            ut labore et dolore
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+
+                        {/* Text Content */}
+                        <div className="w-full md:w-1/2">
+                            <p className="text-lg mb-6">
+                                Universal Funding funds up to 90% of your invoices, offering you a critical boost in cash flow helping you
+                                pay your employees, vendors and other expenses while you wait for your customers to pay their bills.
+                            </p>
+                            <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-md transition duration-300 text-lg">
+                                Get Funded Fast
+                            </button>
                         </div>
                     </div>
                 </div>
-                {/* Services Area End */}
-                {/* Support Company Start*/}
-                <div className="support-company-area section-padding3 fix">
-                    <div className="container">
-                        <div className="row align-items-center">
-                            <div className="col-xl-6 col-lg-6">
-                                <div className="support-location-img mb-50">
-                                    <img src="/assets/img/gallery/single2.jpg" alt="" />
-                                    <div className="support-img-cap">
-                                        <span>Since 1992</span>
-                                    </div>
+            </div>
+
+            <section className="bg-[#f0f8ff] py-12 px-4">
+                <div className="max-w-6xl mx-auto ">
+                    <h2 className="text-4xl font-bold text-center !mb-12">
+                        Specialized funding <span className="text-blue-600">solutions for your industry</span>
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-6">
+                        {industries.map((industry, index) => (
+                            <div key={index} className="flex flex-row items-center justify-center ">
+                                <div className="flex items-center justify-start w-[12rem] gap-2">
+                                    <industry.icon className={`text-2xl ${industry.color}`} />
+                                    <span className="text-sm font-medium">{industry.label}</span>
                                 </div>
                             </div>
-                            <div className="col-xl-6 col-lg-6">
-                                <div className="right-caption">
-                                    {/* Section Tittle */}
-                                    <div className="section-tittle">
-                                        <span>Why Choose Our Company</span>
-                                        <h2>We Promise Sustainable Future For You.</h2>
-                                    </div>
-                                    <div className="support-caption">
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                                            do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                            Ut enim ad minim veniam, quis nostrud.
-                                        </p>
-                                        <div className="select-suport-items">
-                                            <label className="single-items">
-                                                Aorem ipsum dgolor sitnfd amet dfgbn fbsdg
-                                                <input type="checkbox" defaultChecked="checked active" />
-                                                <span className="checkmark" />
-                                            </label>
-                                            <label className="single-items">
-                                                Consectetur adipisicing bfnelit, sedb dvbnfo
-                                                <input type="checkbox" defaultChecked="checked active" />
-                                                <span className="checkmark" />
-                                            </label>
-                                            <label className="single-items">
-                                                Eiusmod tempor incididunt vmgldupout labore
-                                                <input type="checkbox" defaultChecked="checked active" />
-                                                <span className="checkmark" />
-                                            </label>
-                                            <label className="single-items">
-                                                Admkde mibvnim veniam, quivds cnostrud.
-                                                <input type="checkbox" defaultChecked="checked active" />
-                                                <span className="checkmark" />
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
-                {/* Support Company End*/}
-                {/* Application Area Start */}
-                <div
-                    className="application-area pt-150 pb-140"
-                    data-background="/assets/img/gallery/section_bg03.jpg"
-                >
-                    <div className="container">
-                        <div className="row justify-content-center">
-                            <div className="col-lg-6 col-md-10">
-                                {/* Section Tittle */}
-                                <div className="section-tittle section-tittle2 text-center mb-45">
-                                    <span>Apply in Three Easy Steps</span>
-                                    <h2>Easy Application Process For Any Types of Loan</h2>
-                                </div>
+            </section>
+
+
+            <div className="max-w-6xl mx-auto px-4 py-8">
+                <h1 className="text-4xl md:text-4xl font-bold text-center !mb-10 text-blue-900">
+                    <span className="text-black">Why</span> invoice factoring is your best choice
+                </h1>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Bank Line of Credit */}
+                    <div className="border rounded-lg p-6 shadow-md">
+                        <h2 className="text-xl font-semibold mb-4 text-blue-900">Bank Line of Credit</h2>
+                        <p className="text-sm text-blue-500 mb-2">Credit Line:</p>
+                        <p className="text-2xl font-bold mb-4">$20,000-$500,000</p>
+                        <ul className="space-y-2">
+                            <li className="flex items-start">
+                                <span className="text-red-500 mr-2">▲</span>
+                                <span>Advance Rate: 85-90%</span>
+                            </li>
+                            <li className="flex items-start">
+                                <span className="text-red-500 mr-2">▲</span>
+                                <span>First 30 Days: 2-4%</span>
+                            </li>
+                            <li className="flex items-start">
+                                <span className="text-red-500 mr-2">▲</span>
+                                <span>Requires access to accounting software and bank account for approval</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Universal Funding Corporation */}
+                    <div className="border rounded-lg p-6 shadow-md bg-blue-600 text-white">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-xl font-semibold text-white">Universal Funding Corporation</h2>
+                            <div className="flex">
+                                {[...Array(5)].map((_, i) => (
+                                    <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                    </svg>
+                                ))}
                             </div>
                         </div>
-                        <div className="row justify-content-center">
-                            <div className="col-lg-9 col-xl-8">
-                                {/*Hero form */}
-                                <form action="#" className="search-box">
-                                    <div className="select-form">
-                                        <div className="select-itms">
-                                            <select name="select" id="select1">
-                                                <option value="">Select Amount</option>
-                                                <option value="">$120</option>
-                                                <option value="">$700</option>
-                                                <option value="">$750</option>
-                                                <option value="">$250</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="select-form">
-                                        <div className="select-itms">
-                                            <select name="select" id="select1">
-                                                <option value="">Duration Month</option>
-                                                <option value="">7 Days</option>
-                                                <option value="">10 Days</option>
-                                                <option value="">14 Days Days</option>
-                                                <option value="">20 Days</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="input-form">
-                                        <input type="text" placeholder="Return Amount" />
-                                    </div>
-                                    <div className="search-form">
-                                        <a href="apply.html">Apply for Loan</a>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                        <p className="text-sm mb-2 text-white">Invoice Monthly Volume:</p>
+                        <p className="text-2xl font-bold mb-4 text-white/70">$25K- $20M/mo</p>
+                        <ul className="space-y-2 mb-6">
+                            <li className="flex items-start">
+                                <span className="text-yellow-400 mr-2">✓</span>
+                                <span>Advance Rate: up to 95%</span>
+                            </li>
+                            <li className="flex items-start">
+                                <span className="text-yellow-400 mr-2">✓</span>
+                                <span>First 30 Days: 0.55-2%</span>
+                            </li>
+                            <li className="flex items-start">
+                                <span className="text-yellow-400 mr-2">✓</span>
+                                <span>Does not require access to your private banking and accounting information</span>
+                            </li>
+                        </ul>
+                        <button className="w-full bg-white text-blue-600 font-semibold py-2 px-4 rounded hover:bg-blue-100 transition duration-300">
+                            Get Funded Fast →
+                        </button>
+                    </div>
+
+                    {/* Merchant Cash Advance Provider */}
+                    <div className="border rounded-lg p-6 shadow-md">
+                        <h2 className="text-xl font-semibold mb-4 text-blue-900">Merchant Cash Advance Provider</h2>
+                        <p className="text-sm text-blue-500 mb-2">Credit Line:</p>
+                        <p className="text-2xl font-bold mb-4">$1,000-$500,000</p>
+                        <ul className="space-y-2">
+                            <li className="flex items-start">
+                                <span className="text-red-500 mr-2">▲</span>
+                                <span>Advance Rate: Based on loan amount</span>
+                            </li>
+                            <li className="flex items-start">
+                                <span className="text-red-500 mr-2">▲</span>
+                                <span>Fixed loan fee rate: 35-50%</span>
+                            </li>
+                            <li className="flex items-start">
+                                <span className="text-red-500 mr-2">▲</span>
+                                <span>Requires access to bank account for daily withdrawals</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                {/* Application Area End */}
-                {/*Team Ara Start */}
-                <div className="team-area section-padding30">
-                    <div className="container">
-                        <div className="row justify-content-center">
-                            <div className="cl-xl-7 col-lg-8 col-md-10">
-                                {/* Section Tittle */}
-                                <div className="section-tittle text-center mb-70">
-                                    <span>Our Loan Section Team Mambers</span>
-                                    <h2>Take a look to our professional team members.</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-lg-3 col-md-4 col-sm-6">
-                                <div className="single-team mb-30">
-                                    <div className="team-img">
-                                        <img src="/assets/img/gallery/home_blog1.png" alt="" />
-                                        {/* Blog Social */}
-                                        <div className="team-social">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fab fa-facebook-f" />
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fab fa-twitter" />
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fas fa-globe" />
-                                                </a>
-                                            </li>
-                                        </div>
-                                    </div>
-                                    <div className="team-caption">
-                                        <h3>
-                                            <a href="#">Bruce Roberts</a>
-                                        </h3>
-                                        <p>Volunteer leader</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-4 col-sm-6">
-                                <div className="single-team mb-30">
-                                    <div className="team-img">
-                                        <img src="/assets/img/gallery/home_blog2.png" alt="" />
-                                        {/* Blog Social */}
-                                        <div className="team-social">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fab fa-facebook-f" />
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fab fa-twitter" />
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fas fa-globe" />
-                                                </a>
-                                            </li>
-                                        </div>
-                                    </div>
-                                    <div className="team-caption">
-                                        <h3>
-                                            <a href="#">Bruce Roberts</a>
-                                        </h3>
-                                        <p>Volunteer leader</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-4 col-sm-6">
-                                <div className="single-team mb-30">
-                                    <div className="team-img">
-                                        <img src="/assets/img/gallery/home_blog3.png" alt="" />
-                                        {/* Blog Social */}
-                                        <div className="team-social">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fab fa-facebook-f" />
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fab fa-twitter" />
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fas fa-globe" />
-                                                </a>
-                                            </li>
-                                        </div>
-                                    </div>
-                                    <div className="team-caption">
-                                        <h3>
-                                            <a href="#">Bruce Roberts</a>
-                                        </h3>
-                                        <p>Volunteer leader</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-4 col-sm-6">
-                                <div className="single-team mb-30">
-                                    <div className="team-img">
-                                        <img src="/assets/img/gallery/home_blog4.png" alt="" />
-                                        {/* Blog Social */}
-                                        <div className="team-social">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fab fa-facebook-f" />
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fab fa-twitter" />
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fas fa-globe" />
-                                                </a>
-                                            </li>
-                                        </div>
-                                    </div>
-                                    <div className="team-caption">
-                                        <h3>
-                                            <a href="#">Bruce Roberts</a>
-                                        </h3>
-                                        <p>Volunteer leader</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/* Team Ara End */}
-                {/* Testimonial Start */}
-                <div className="testimonial-area t-bg testimonial-padding">
-                    <div className="container ">
-                        <div className="row d-flex justify-content-center">
-                            <div className="col-xl-11 col-lg-11 col-md-9">
-                                <div className="h1-testimonial-active">
-                                    {/* Single Testimonial */}
-                                    <div className="single-testimonial text-center">
-                                        {/* Testimonial Content */}
-                                        <div className="testimonial-caption ">
-                                            <div className="testimonial-top-cap">
-                                                <img src="/assets/img/gallery/testimonial.png" alt="" />
-                                                <p>
-                                                    Logisti Group is a representative logistics operator
-                                                    providing full range of ser of customs clearance and
-                                                    transportation worl.
-                                                </p>
-                                            </div>
-                                            {/* founder */}
-                                            <div className="testimonial-founder d-flex align-items-center justify-content-center">
-                                                <div className="founder-img">
-                                                    <img
-                                                        src="/assets/img/testmonial/Homepage_testi.png"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div className="founder-text">
-                                                    <span>Jessya Inn</span>
-                                                    <p>Co Founder</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* Single Testimonial */}
-                                    <div className="single-testimonial text-center">
-                                        {/* Testimonial Content */}
-                                        <div className="testimonial-caption ">
-                                            <div className="testimonial-top-cap">
-                                                <img src="/assets/img/gallery/testimonial.png" alt="" />
-                                                <p>
-                                                    Logisti Group is a representative logistics operator
-                                                    providing full range of ser of customs clearance and
-                                                    transportation worl.
-                                                </p>
-                                            </div>
-                                            {/* founder */}
-                                            <div className="testimonial-founder d-flex align-items-center justify-content-center">
-                                                <div className="founder-img">
-                                                    <img
-                                                        src="/assets/img/testmonial/Homepage_testi.png"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div className="founder-text">
-                                                    <span>Jessya Inn</span>
-                                                    <p>Co Founder</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/* Testimonial End */}
-                {/* Blog Ara Start */}
-                <div className="home-blog-area section-padding30">
-                    <div className="container">
-                        <div className="row justify-content-center">
-                            <div className="col-lg-7 col-md-10">
-                                {/* Section Tittle */}
-                                <div className="section-tittle text-center mb-70">
-                                    <span>News form our latest blog</span>
-                                    <h2>News from around the world selected by us.</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-xl-6 col-lg-6 col-md-6">
-                                {/* single-david */}
-                                <div className="single-blogs mb-30">
-                                    <div className="blog-images">
-                                        <img src="/assets/img/gallery/blog1.png" alt="" />
-                                    </div>
-                                    <div className="blog-captions">
-                                        <span>January 28, 2020</span>
-                                        <h2>
-                                            <a href="blog_details.html">
-                                                The advent of pesticides brought in its benefits and
-                                                pitfalls.
-                                            </a>
-                                        </h2>
-                                        <p>October 6, a2020by Steve</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-xl-6 col-lg-6 col-md-6">
-                                {/* single-david */}
-                                <div className="single-blogs mb-30">
-                                    <div className="blog-images">
-                                        <img src="/assets/img/gallery/blog2.png" alt="" />
-                                    </div>
-                                    <div className="blog-captions">
-                                        <span>January 28, 2020</span>
-                                        <h2>
-                                            <a href="blog_details.html">
-                                                The advent of pesticides brought in its benefits and
-                                                pitfalls.
-                                            </a>
-                                        </h2>
-                                        <p>October 6, a2020by Steve</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/* Blog Ara End */}
-            </main>
-            
-        </section>
+            </div>
+        </>
     )
 }
 

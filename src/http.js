@@ -39,3 +39,6 @@ export const updateVednorRequest = async (formData,id) => await api.put(`/vendor
 
 
 export const updateUserRequest = async (formData) => await api.put('/user/update',formData);
+
+
+export const sendEmailRequest = async (formData) => await api.post('/send-email',formData);

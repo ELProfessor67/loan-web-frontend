@@ -1,64 +1,22 @@
 "use client"
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
 const Header = () => {
     const pathname = usePathname();
-  return (
-    <header>
-                    {/* Header Start */}
-                    <div className="header-area header-transparent">
-                        <div className="main-header  header-sticky">
-                            <div className="container-fluid">
-                                <div className="row align-items-center">
-                                    {/* Logo */}
-                                    <div className="col-xl-2 col-lg-2 col-md-1">
-                                        <div className="logo">
-                                            <a href="/">
-                                                <img src="assets/img/logo/logo.png" alt="" className='w-[8rem]'/>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div className="col-xl-10 col-lg-10 col-md-10">
-                                        <div className="menu-main d-flex align-items-center justify-content-end">
-                                            {/* Main-menu */}
-                                            <div className="main-menu f-right d-none d-lg-block">
-                                                <nav>
-                                                    <ul id="navigation">
-                                                        <li className={pathname == "/" && 'active'}>
-                                                            <Link href="/">Home</Link>
-                                                        </li>
-                                                        <li  className={pathname == "/about" && 'active'}>
-                                                            <Link href="/about">About</Link>
-                                                        </li>
-                                                        <li  className={pathname == "/services" && 'active'}>
-                                                            <Link href="/services">Services</Link>
-                                                        </li>
-                                                        <li  className={pathname == "/contact" && 'active'}>
-                                                            <Link href="/contact">Contact</Link>
-                                                        </li>
-                                                    </ul>
-                                                </nav>
-                                            </div>
-                                            <div className="header-right-btn f-right d-none d-lg-block">
-                                                <Link href="/login" className="btn header-btn">
-                                                    Get Stated
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* Mobile Menu */}
-                                    <div className="col-12">
-                                        <div className="mobile_menu d-block d-lg-none" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Header End */}
-                </header>
-  )
+    return (
+        <header className="container mx-auto px-4 py-2 flex flex-wrap justify-between items-center">
+            <Image src="/assets/img/logo/logo.png" alt="Universal Funding Corporation Logo" width={100} height={50} />
+            <div className="flex items-center space-x-4">
+            
+                <Link href="/login" className="bg-blue-600 text-white font-bold text-lg rounded-full px-6 py-2 hover:bg-blue-700 transition-colors">
+                    Get Started
+                </Link>
+            </div>
+        </header>
+    )
 }
 
 export default Header
