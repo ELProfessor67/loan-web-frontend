@@ -27,6 +27,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
   const queryClient = useQueryClient()
   const [loading, setLoading] = useState(false);
   const [serviceChargeAmount, setServiceChargeAmount] = useState(5);
+  const [serviceChargeAmount2, setServiceChargeAmount2] = useState(2);
   const [message, setMessage] = useState(null);
   const [message2, setMessage2] = useState(null);
   const [selectedValue, setSelectedValue] = useState([{ name: 'mdse', id: 1 }]);
@@ -36,6 +37,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
     POnumber: '',
     amount: '',
     attach: '',
+    sign: '',
     ship: {
       date: '',
       file: ''
@@ -54,6 +56,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
     POnumber: '',
     amount: '',
     attach: '',
+    sign: '',
     ship: {
       date: '',
       file: ''
@@ -72,6 +75,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
     POnumber: '',
     amount: '',
     attach: '',
+    sign: '',
     ship: {
       date: '',
       file: ''
@@ -90,6 +94,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
     POnumber: '',
     amount: '',
     attach: '',
+    sign: '',
     ship: {
       date: '',
       file: ''
@@ -108,6 +113,26 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
     POnumber: '',
     amount: '',
     attach: '',
+    sign: '',
+    ship: {
+      date: '',
+      file: ''
+    },
+    recieve: {
+      date: '',
+      file: ''
+    },
+    tracking: {
+      link: '',
+      number: ''
+    }
+  })
+  const [serviceCharge2, setserviceCharge2] = useState({
+    vendor: '',
+    POnumber: '',
+    amount: '',
+    attach: '',
+    sign: '',
     ship: {
       date: '',
       file: ''
@@ -126,6 +151,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
     POnumber: '',
     amount: '',
     attach: '',
+    sign: '',
     name: 'misc',
     ship: {
       date: '',
@@ -145,6 +171,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
     POnumber: '',
     amount: '',
     attach: '',
+    sign: '',
     ship: {
       date: '',
       file: ''
@@ -163,6 +190,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
     POnumber: '',
     amount: '',
     attach: '',
+    sign: '',
     ship: {
       date: '',
       file: ''
@@ -181,6 +209,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
     POnumber: '',
     amount: '',
     attach: '',
+    sign: '',
     ship: {
       date: '',
       file: ''
@@ -194,6 +223,26 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       number: ''
     }
   })
+
+  const [PIE, setPIE] = useState({
+    vendor: '',
+    POnumber: '',
+    amount: '',
+    attach: '',
+    sign: '',
+    ship: {
+      date: '',
+      file: ''
+    },
+    recieve: {
+      date: '',
+      file: ''
+    },
+    tracking: {
+      link: '',
+      number: ''
+    }
+  });
   const [dealId, setdealId] = useState(0);
 
 
@@ -291,6 +340,17 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       }
     })
   }
+
+  const handleSignFileChange = (e, setState) => {
+    
+    const [file] = e.target.files;
+    setState(prev => {
+      return {
+        ...prev,
+        sign: file
+      }
+    })
+  }
   const handleShipAttachFileChange = (e, setState) => {
     const [file] = e.target.files;
     setState(prev => {
@@ -338,7 +398,6 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       formData.append('dealId', dealId);
 
 
-
       formData.append('mdseVendor', mdse.vendor);
       formData.append('mdsePOnumber', mdse.POnumber);
       formData.append('mdseAmount', mdse.amount);
@@ -349,6 +408,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       formData.append('mdseAttach', mdse.attach);
       formData.append('mdseShipFile', mdse.ship.file);
       formData.append('mdseRecieveFile', mdse.recieve.file);
+      formData.append('mdseSign', mdse.sign);
 
 
 
@@ -362,6 +422,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       formData.append('freightAttach', freight.attach);
       formData.append('freightShipFile', freight.ship.file);
       formData.append('freightRecieveFile', freight.recieve.file);
+      formData.append('freightSign', freight.sign);
 
 
       formData.append('freight2Vendor', freight2.vendor);
@@ -374,6 +435,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       formData.append('freight2Attach', freight2.attach);
       formData.append('freight2ShipFile', freight2.ship.file);
       formData.append('freight2RecieveFile', freight2.recieve.file);
+      formData.append('freight2Sign', freight2.sign);
 
 
       formData.append('warehouseVendor', warehouse.vendor);
@@ -386,6 +448,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       formData.append('warehouseAttach', warehouse.attach);
       formData.append('warehouseShipFile', warehouse.ship.file);
       formData.append('warehouseRecieveFile', warehouse.recieve.file);
+      formData.append('warehouseSign', warehouse.sign);
 
 
       formData.append('serviceChargeVendor', serviceCharge.vendor);
@@ -400,6 +463,19 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       formData.append('serviceChargeRecieveFile', serviceCharge.recieve.file);
 
 
+      formData.append('serviceCharge2Vendor', serviceCharge2.vendor);
+      formData.append('serviceCharge2POnumber', serviceCharge2.POnumber);
+      formData.append('serviceCharge2Amount', serviceCharge2.amount);
+      formData.append('serviceCharge2ShipDate', serviceCharge2.ship.date);
+      formData.append('serviceCharge2RecieveDate', serviceCharge2.recieve.date);
+      formData.append('serviceCharge2TrackingNumber', serviceCharge2.tracking.number);
+      formData.append('serviceCharge2Tracking', serviceCharge2.tracking.link);
+      formData.append('serviceCharge2Attach', serviceCharge2.attach);
+      formData.append('serviceCharge2ShipFile', serviceCharge2.ship.file);
+      formData.append('serviceCharge2RecieveFile', serviceCharge2.recieve.file);
+
+
+
       formData.append('miscVendor', misc.vendor);
       formData.append('miscPOnumber', misc.POnumber);
       formData.append('miscAmount', misc.amount);
@@ -411,6 +487,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       formData.append('miscAttach', misc.attach);
       formData.append('miscShipFile', misc.ship.file);
       formData.append('miscRecieveFile', misc.recieve.file);
+      formData.append('miscSign', misc.sign);
 
 
 
@@ -424,6 +501,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       formData.append('salesAttach', sales.attach);
       formData.append('salesShipFile', sales.ship.file);
       formData.append('salesRecieveFile', sales.recieve.file);
+      formData.append('salesSign', sales.sign);
 
 
       formData.append('profitVendor', profit.vendor);
@@ -449,6 +527,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       formData.append('PRCShipFile', PRC.ship.file);
       formData.append('PRCRecieveFile', PRC.recieve.file);
 
+      formData.append('PIEAmout', PIE.amount);
 
 
 
@@ -569,7 +648,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
         POnumber: '',
         amount: '',
         attach: '',
-        name:'',
+        name: '',
         ship: {
           date: '',
           file: ''
@@ -660,6 +739,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       try {
         const res = await getServiceChargeRequest();
         setServiceChargeAmount(res.data.serviceCharge)
+        setServiceChargeAmount2(res.data.serviceCharge2)
         // setserviceCharge(prev => ({...prev,amount: `${res.data.serviceCharge}%`}));
       } catch (error) {
         console.log('Error while getting serviec charge')
@@ -676,6 +756,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
 
   useEffect(() => {
     console.log(mdse.amount, freight.amount, freight2.amount, warehouse.amount, misc.amount, serviceChargeAmount, sales.amount, 'value')
+    let isLessThen25000 = false;
     // Calculate total cost
     const totalCost =
       Number(mdse.amount || 0) +
@@ -687,15 +768,51 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
     // Ensure revenue is at least 25,000
     let revenue = Number(sales.amount || 0);
     if (revenue < 25000) {
-      setMessage2(`Your sales amount is ${revenue}, which is less than or equal to 25000. Service charges are calculated assuming a sales amount of 25000.`)
+      setMessage2(`Your sales amount is ${revenue}, which is less than or equal to 25,000. Service charges are calculated based on a sales amount of 25,000 with a fixed service charge of 1,250 deducted.`)
       revenue = 25000;
-    }else{
+      isLessThen25000 = true;
+
+      const Totalprofit = revenue - totalCost;
+      const charge = 1250;
+      const serviceCharge = (charge / Totalprofit) * 100;
+
+      setserviceCharge((prev) => ({
+        ...prev,
+        amount: `${1250} | ${serviceCharge.toFixed(2)}%`,
+      }));
+
+      // Update service charge state
+      setserviceCharge2((prev) => ({
+        ...prev,
+        amount: `0 | ${0}%`,
+      }));
+
+
+      let prifitInPIE = (Number(20) / 100) * Totalprofit;
+      setPIE((prev) => ({
+        ...prev,
+        amount: `${prifitInPIE.toFixed(2)} | ${20}%`,
+      }));
+
+       // Calculate return to customer
+       const returnToCustomerProfit = Totalprofit - (charge);
+       const returnToCustomerProfitPercentage =
+         (returnToCustomerProfit / revenue) * 100;
+ 
+       // Update PRC state
+       setPRC((prev) => ({
+         ...prev,
+         amount: `${returnToCustomerProfit.toFixed(2)} | ${returnToCustomerProfitPercentage.toFixed(2)}%`,
+       }));
+
+    } else {
       setMessage2(null)
+      isLessThen25000 = false
     }
 
     console.log(totalCost, revenue, "Calculated Total Cost and Revenue");
 
-    if (totalCost > 0 && revenue > 0) {
+    if (totalCost > 0 && revenue > 0 && !isLessThen25000) {
       // Calculate profit and profit percentage
       const Totalprofit = revenue - totalCost;
       const profitPercentage = (Totalprofit / revenue) * 100;
@@ -711,16 +828,30 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       }));
 
       let totalCharge;
+      let totalCharge2;
 
       // If profit percentage is <= 40%, calculate service charge assuming profit is 40%
       if (profitPercentage <= 40) {
         const assumedProfit = (revenue * 40) / 100; // Assume profit is 40%
         totalCharge = (Number(serviceChargeAmount) / 100) * assumedProfit;
+        totalCharge2 = (Number(serviceChargeAmount2) / 100) * assumedProfit;
+        let prifitInPIE = (Number(20) / 100) * assumedProfit;
 
         // Update service charge state
         setserviceCharge((prev) => ({
           ...prev,
           amount: `${totalCharge.toFixed(2)} | ${serviceChargeAmount}%`,
+        }));
+
+        // Update service charge state
+        setserviceCharge2((prev) => ({
+          ...prev,
+          amount: `${totalCharge2.toFixed(2)} | ${serviceChargeAmount2}%`,
+        }));
+
+        setPIE((prev) => ({
+          ...prev,
+          amount: `${prifitInPIE.toFixed(2)} | ${20}%`,
         }));
 
         // Display message
@@ -733,6 +864,8 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
         setMessage(null);
         // If profit percentage is > 40%, calculate service charge based on actual profit
         totalCharge = (Number(serviceChargeAmount) / 100) * Totalprofit;
+        totalCharge2 = (Number(serviceChargeAmount2) / 100) * Totalprofit;
+        let prifitInPIE = (Number(20) / 100) * Totalprofit;
 
         // Update service charge state
         setserviceCharge((prev) => ({
@@ -740,12 +873,23 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
           amount: `${totalCharge.toFixed(2)} | ${serviceChargeAmount}%`,
         }));
 
+        // Update service charge state
+        setserviceCharge2((prev) => ({
+          ...prev,
+          amount: `${totalCharge2.toFixed(2)} | ${serviceChargeAmount2}%`,
+        }));
+
+        setPIE((prev) => ({
+          ...prev,
+          amount: `${prifitInPIE.toFixed(2)} | ${20}%`,
+        }));
+
         // Clear message since profit is higher than 40%
         setMessage(null);
       }
 
       // Calculate return to customer
-      const returnToCustomerProfit = Totalprofit - totalCharge;
+      const returnToCustomerProfit = Totalprofit - (totalCharge + totalCharge2);
       const returnToCustomerProfitPercentage =
         (returnToCustomerProfit / revenue) * 100;
 
@@ -773,9 +917,9 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
   ) => (
     <tr key={vendorType} className={`border-b ${vendorType === 'SALES' || vendorType === 'OROFIT' ? 'bg-green-100' : 'bg-white'}`}>
       {vendorType == 'misc' ? <td className="border-r p-1 text-sm">
-        <input type="text" className="w-full  px-1" value={state.name} onChange={(e) => setState(prev => ({...prev,name: e.target.value}))} readOnly={!isEdittable} />
+        <input type="text" className="w-full  px-1" value={state.name} onChange={(e) => setState(prev => ({ ...prev, name: e.target.value }))} readOnly={!isEdittable} />
       </td> : <td className="border-r p-1 text-sm">{vendorType}</td>}
-      
+
       <td className="border-r p-1 text-sm">
         <select className="w-full bg-transparent text-sm " value={state.value} onChange={(e) => handleVendorChange(setState, e.target.value)}>
           <option value="">Select Vendor</option>
@@ -837,6 +981,19 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       <td className="p-1 text-sm">
         <input type="text" className="w-full  px-1" value={state.tracking?.link} onChange={(e) => handleTrackingLinkChange(setState, e.target.value)} placeholder="Tracking Link" readOnly={!isEdittable} />
       </td>
+
+
+
+      <td className="border-l p-1 text-sm">
+        <label htmlFor={`sign-${vendorType}`} className="cursor-pointer text-blue-600 hover:underline text-sm">
+          {state.sign?.name || "Choose file"}
+        </label>
+        <input
+          id={`sign-${vendorType}`}
+          type="file"
+          className="hidden"
+          onChange={(e) => handleSignFileChange(e, setState)}/>
+      </td>
     </tr>
   )
 
@@ -883,6 +1040,9 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       </td>
 
       <td className="border-r p-1 text-sm">
+
+      </td>
+      <td className="p-1 border-r  text-sm">
 
       </td>
       <td className="p-1 text-sm">
@@ -933,6 +1093,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
                   <th className="border p-1">attach</th>
                   <th className="border p-1">Tracking Number</th>
                   <th className="border p-1">Tracking Link</th>
+                  <th className="border p-1">Sign Attachment</th>
                 </tr>
               </thead>
               <tbody>
@@ -943,7 +1104,9 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
                 {selectedValue.find(value => value.name == 'misc') && renderRow('misc', members, misc, setmisc)}
                 {renderRow('sales', salescompany, sales, setsales)}
                 {renderResultRow('profit', members, profit, setprofit, false)}
+                {renderResultRow('PIE', members, PIE, setPIE, false)}
                 {renderResultRow('serviceCharge', members, serviceCharge, setserviceCharge, false)}
+                {renderResultRow('serviceCharge2', members, serviceCharge2, setserviceCharge2, false)}
                 {/* {renderResultRow('Profit Return To Customer', members, PRC, setPRC, false)} */}
 
               </tbody>
@@ -963,6 +1126,10 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
                 {message2}
               </p>
             }
+              <p className='flex text-sm mt-2'>
+                <b className='whitespace-pre mr-1'>Note :</b>
+                20% of the profit will remain in escrow and will be returned after a certain period.
+              </p>
 
             <div className='flex justify-center py-3'>
               <button onClick={handleSubmit} className='py-2 px-4 rounded-md bg-blue-1'>{loading ? 'Loading...' : 'SUBMIT'}</button>

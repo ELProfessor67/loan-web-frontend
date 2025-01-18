@@ -47,6 +47,9 @@ const renderRow = (
              {state?.tracking?.link && <a className="text-blue-500" href={state?.tracking?.link}>OPEN</a>}
           
         </td>
+        <td className="border-l p-1 text-sm">
+            {state?.sign && <a className="text-blue-500" href={`${BACKEND_URL}/${state?.sign}`}>OPEN</a>}
+        </td>
     </tr>
 )
 
@@ -98,6 +101,7 @@ const page = ({ params }) => {
                                         <th className="border p-1">attach</th>
                                         <th className="border p-1">Tracking Number</th>
                                         <th className="border p-1">Tracking Link</th>
+                                        <th className="border p-1">Sign Attachement</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -106,10 +110,12 @@ const page = ({ params }) => {
                                     {renderRow('freight2', data?.freight2)}
                                     {renderRow('warehouse', data?.warehouse)}
                                     {renderRow('serviceCharge', data?.serviceCharge)}
+                                    {renderRow('serviceCharge2', data?.serviceCharge2)}
                                     {renderRow('misc', data?.misc)}
                                     {renderRow('sales', data?.sales)}
                                     {renderRow('profit', data?.profit)}
-                                    {renderRow('Profit Return To Customer', data?.PRC)}
+                                    {renderRow('PIE', data?.PIE)}
+                                    {/* {renderRow('Profit Return To Customer', data?.PRC)} */}
 
                                 </tbody>
                             </table>
