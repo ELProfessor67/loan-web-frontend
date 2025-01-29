@@ -28,6 +28,10 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
   const [loading, setLoading] = useState(false);
   const [serviceChargeAmount, setServiceChargeAmount] = useState(5);
   const [serviceChargeAmount2, setServiceChargeAmount2] = useState(2);
+  const [miniumRevenue, setminiumRevenue] = useState(0);
+  const [miniumRevenueAmout, setminiumRevenueAmout] = useState(0);
+  const [escrowAmout, setescrowAmout] = useState(0);
+  const [assumedProfitd, setassumedProfit] = useState(0);
   const [message, setMessage] = useState(null);
   const [message2, setMessage2] = useState(null);
   const [selectedValue, setSelectedValue] = useState([{ name: 'mdse', id: 1 }]);
@@ -342,7 +346,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
   }
 
   const handleSignFileChange = (e, setState) => {
-    
+
     const [file] = e.target.files;
     setState(prev => {
       return {
@@ -738,8 +742,12 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
     const getServiceCharge = async () => {
       try {
         const res = await getServiceChargeRequest();
-        setServiceChargeAmount(res.data.serviceCharge)
-        setServiceChargeAmount2(res.data.serviceCharge2)
+        setServiceChargeAmount(Number(res.data.serviceCharge))
+        setServiceChargeAmount2(Number(res.data.serviceCharge2))
+        setminiumRevenue(Number(res.data.miniumRevenue))
+        setminiumRevenueAmout(Number(res.data.miniumRevenueAmout))
+        setescrowAmout(Number(res.data.escrowAmout))
+        setassumedProfit(Number(res.data.assumedProfit))
         // setserviceCharge(prev => ({...prev,amount: `${res.data.serviceCharge}%`}));
       } catch (error) {
         console.log('Error while getting serviec charge')
@@ -767,18 +775,18 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
 
     // Ensure revenue is at least 25,000
     let revenue = Number(sales.amount || 0);
-    if (revenue < 25000) {
-      setMessage2(`Your sales amount is ${revenue}, which is less than or equal to 25,000. Service charges are calculated based on a sales amount of 25,000 with a fixed service charge of 1,250 deducted.`)
-      revenue = 25000;
+    if (revenue < miniumRevenue) {
+      setMessage2(`Your sales amount is ${revenue}, which is less than or equal to 25,000. Service charges are calculated based on a sales amount of ${miniumRevenue} with a fixed service charge of 1,250 deducted.`)
+      revenue = miniumRevenue;
       isLessThen25000 = true;
 
       const Totalprofit = revenue - totalCost;
-      const charge = 1250;
+      const charge = miniumRevenueAmout;
       const serviceCharge = (charge / Totalprofit) * 100;
 
       setserviceCharge((prev) => ({
         ...prev,
-        amount: `${1250} | ${serviceCharge.toFixed(2)}%`,
+        amount: `${miniumRevenueAmout} | ${serviceCharge.toFixed(2)}%`,
       }));
 
       // Update service charge state
@@ -794,16 +802,16 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
         amount: `${prifitInPIE.toFixed(2)} | ${20}%`,
       }));
 
-       // Calculate return to customer
-       const returnToCustomerProfit = Totalprofit - (charge);
-       const returnToCustomerProfitPercentage =
-         (returnToCustomerProfit / revenue) * 100;
- 
-       // Update PRC state
-       setPRC((prev) => ({
-         ...prev,
-         amount: `${returnToCustomerProfit.toFixed(2)} | ${returnToCustomerProfitPercentage.toFixed(2)}%`,
-       }));
+      // Calculate return to customer
+      const returnToCustomerProfit = Totalprofit - (charge);
+      const returnToCustomerProfitPercentage =
+        (returnToCustomerProfit / revenue) * 100;
+
+      // Update PRC state
+      setPRC((prev) => ({
+        ...prev,
+        amount: `${returnToCustomerProfit.toFixed(2)} | ${returnToCustomerProfitPercentage.toFixed(2)}%`,
+      }));
 
     } else {
       setMessage2(null)
@@ -831,8 +839,8 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
       let totalCharge2;
 
       // If profit percentage is <= 40%, calculate service charge assuming profit is 40%
-      if (profitPercentage <= 40) {
-        const assumedProfit = (revenue * 40) / 100; // Assume profit is 40%
+      if (profitPercentage <= assumedProfitd) {
+        const assumedProfit = (revenue * assumedProfitd) / 100; // Assume profit is 40%
         totalCharge = (Number(serviceChargeAmount) / 100) * assumedProfit;
         totalCharge2 = (Number(serviceChargeAmount2) / 100) * assumedProfit;
         let prifitInPIE = (Number(20) / 100) * assumedProfit;
@@ -992,7 +1000,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
           id={`sign-${vendorType}`}
           type="file"
           className="hidden"
-          onChange={(e) => handleSignFileChange(e, setState)}/>
+          onChange={(e) => handleSignFileChange(e, setState)} />
       </td>
     </tr>
   )
@@ -1126,10 +1134,10 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
                 {message2}
               </p>
             }
-              <p className='flex text-sm mt-2'>
-                <b className='whitespace-pre mr-1'>Note :</b>
-                20% of the profit will remain in escrow and will be returned after a certain period.
-              </p>
+            <p className='flex text-sm mt-2'>
+              <b className='whitespace-pre mr-1'>Note :</b>
+              {escrowAmout}% of the profit will remain in escrow and will be returned after a certain period.
+            </p>
 
             <div className='flex justify-center py-3'>
               <button onClick={handleSubmit} className='py-2 px-4 rounded-md bg-blue-1'>{loading ? 'Loading...' : 'SUBMIT'}</button>

@@ -4,6 +4,7 @@ import AddSalesCompany from '@/components/AddSalesCompany';
 import AddVendorDialog from '@/components/AddVendorDialog';
 import CompanyAdd from '@/components/CompanyAdd';
 import NewAddVendorForn from '@/components/NewAddVendorForm';
+import SendMail from '@/components/SendMail';
 import ViewReason from '@/components/ViewResong';
 import { getAllCompanyRequest, getAllSalesCompanyRequest, getUserMemberRequest, getUserVendorRequest } from '@/http';
 import Link from 'next/link';
@@ -27,6 +28,7 @@ const page = () => {
     const [memberOpen,setMemberOpen] = useState(false);
     const [companyOpen,setCompanyOpen] = useState(false);
     const [salescompanyOpen,setSalesCompanyOpen] = useState(false);
+    const [sendMailOpen,setSendMailOpen] = useState(false);
 
 
     const getMembers = async () => {
@@ -105,6 +107,12 @@ const page = () => {
                                 <div className="header-right-btn f-right d-lg-block">
                                     <button className="btn header-btn" onClick={() => setSalesCompanyOpen(true)}>
                                         Add Sales Company
+                                    </button>
+                                </div>
+
+                                <div className="header-right-btn f-right d-lg-block">
+                                    <button className="btn header-btn" onClick={() => setSendMailOpen(true)}>
+                                        Send Mail
                                     </button>
                                 </div>
                             </div>
@@ -195,6 +203,7 @@ const page = () => {
             <AddMembers open={memberOpen} onClose={() => setMemberOpen(false)}/>
             <CompanyAdd open={companyOpen} onClose={() => setCompanyOpen(false)} />
             <AddSalesCompany open={salescompanyOpen} onClose={() => setSalesCompanyOpen(false)}/>
+            <SendMail open={sendMailOpen} onClose={() => setSendMailOpen(false)}/>
         </>
 
     )
