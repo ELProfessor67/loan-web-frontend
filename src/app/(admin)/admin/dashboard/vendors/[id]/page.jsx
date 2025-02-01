@@ -29,6 +29,10 @@ const renderRow = (
         <td className="border-r p-1 text-sm">
             {state?.attach && <a className="text-blue-500" href={`${BACKEND_URL}/${state?.attach}`}>OPEN</a>}
         </td>
+        <td className="border-l p-1 text-sm">
+            {state?.sign && <a className="text-blue-500" href={`${BACKEND_URL}/${state?.sign}`}>OPEN</a>}
+
+        </td>
         <td className="border-r p-1 text-sm">
             <input type="text" className="w-full  px-1" readOnly value={state?.ship?.date} />
         </td>
@@ -52,10 +56,7 @@ const renderRow = (
 
         </td>
 
-        <td className="border-l p-1 text-sm">
-            {state?.sign && <a className="text-blue-500" href={`${BACKEND_URL}/${state?.sign}`}>OPEN</a>}
-
-        </td>
+        
     </tr>
 )
 
@@ -148,13 +149,13 @@ const page = ({ params }) => {
                                                         <th className="border p-1">PO Number</th>
                                                         <th className="border p-1">Amount</th>
                                                         <th className="border p-1">Attach</th>
+                                                        <th className="border p-1">Sign Attachment</th>
                                                         <th className="border p-1">Ship Date</th>
                                                         <th className="border p-1">attach</th>
                                                         <th className="border p-1">Received Date</th>
                                                         <th className="border p-1">attach</th>
                                                         <th className="border p-1">Tracking Number</th>
                                                         <th className="border p-1">Tracking Link</th>
-                                                        <th className="border p-1">Sign Attachment</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

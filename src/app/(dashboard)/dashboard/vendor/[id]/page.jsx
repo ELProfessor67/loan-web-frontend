@@ -1,7 +1,9 @@
 'use client';
 
+import ViewReason from "@/components/ViewResong";
 import { BACKEND_URL } from "@/contants/URLS";
 import { getVendorDetailRequest } from "@/http";
+import { useState } from "react";
 import { useQuery } from "react-query";
 
 
@@ -26,8 +28,12 @@ const renderRow = (
             {state?.attach && <a className="text-blue-500" href={`${BACKEND_URL}/${state?.attach}`}>OPEN</a>}
         </td>
         <td className="border-r p-1 text-sm">
+            {state?.sign && <a className="text-blue-500" href={`${BACKEND_URL}/${state?.sign}`}>OPEN</a>}
+        </td>
+        <td className="border-r p-1 text-sm">
             <input type="text" className="w-full  px-1" readOnly value={state?.ship?.date} />
         </td>
+
         <td className="border-r p-1 text-sm">
             {state?.ship?.file && <a className="text-blue-500" href={`${BACKEND_URL}/${state?.ship?.file}`}>OPEN</a>}
         </td>
@@ -43,19 +49,26 @@ const renderRow = (
         <td className="border-r p-1 text-sm">
             <input type="text" className="w-full  px-1" readOnly value={state?.tracking?.number} />
         </td>
-        <td className="p-1 text-sm">
+        <td className="p-1 text-sm border-r">
              {state?.tracking?.link && <a className="text-blue-500" href={state?.tracking?.link}>OPEN</a>}
           
         </td>
-        <td className="border-l p-1 text-sm">
-            {state?.sign && <a className="text-blue-500" href={`${BACKEND_URL}/${state?.sign}`}>OPEN</a>}
+
+        <td className="p-1 text-sm border-r">
+           <span> {state?.amount && state.status}</span><br/>
+            {
+                state.status == 'rejected' &&  <span className="text-red-500 cursor-pointer" onClick={() => setState(state.message)}>View</span>
+            }
         </td>
+        
+        
     </tr>
 )
 
 
 const page = ({ params }) => {
     const { id } = params;
+    const [state,setState] = useState(null)
 
     const getVendorDetail = async () => {
         try {
@@ -95,26 +108,33 @@ const page = ({ params }) => {
                                         <th className="border p-1">PO Number</th>
                                         <th className="border p-1">Amount</th>
                                         <th className="border p-1">Attach</th>
+                                        <th className="border p-1">Sign Attachement</th>
                                         <th className="border p-1">Ship Date</th>
                                         <th className="border p-1">attach</th>
                                         <th className="border p-1">Received Date</th>
                                         <th className="border p-1">attach</th>
                                         <th className="border p-1">Tracking Number</th>
                                         <th className="border p-1">Tracking Link</th>
-                                        <th className="border p-1">Sign Attachement</th>
+                                        <th className="border p-1">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {renderRow('mdse', data?.mdse)}
-                                    {renderRow('freight', data?.freight)}
-                                    {renderRow('freight2', data?.freight2)}
-                                    {renderRow('warehouse', data?.warehouse)}
-                                    {renderRow('serviceCharge', data?.serviceCharge)}
-                                    {renderRow('serviceCharge2', data?.serviceCharge2)}
-                                    {renderRow('misc', data?.misc)}
-                                    {renderRow('sales', data?.sales)}
-                                    {renderRow('profit', data?.profit)}
-                                    {renderRow('PIE', data?.PIE)}
+                                    {
+                                        data?.mdse.amount && 
+                                        renderRow('mdse', data?.mdse,setState)
+                                    }
+                                    {
+                                        data?.freight.amount && 
+                                        renderRow('freight', data?.freight,setState)
+                                    }   
+                                    { data?.freight2.amount && renderRow('freight2', data?.freight2, setState)}
+                                    {data?.warehouse?.amount && renderRow('warehouse', data?.warehouse, setState)}
+                                    {renderRow('serviceCharge', data?.serviceCharge, setState)}
+                                    {renderRow('serviceCharge2', data?.serviceCharge2, setState)}
+                                    {data?.misc.amount && renderRow('misc', data?.misc, setState)}
+                                    {renderRow('sales', data?.sales, setState)}
+                                    {renderRow('profit', data?.profit, setState)}
+                                    {renderRow('PIE', data?.PIE, setState)}
                                     {/* {renderRow('Profit Return To Customer', data?.PRC)} */}
 
                                 </tbody>
@@ -124,6 +144,7 @@ const page = ({ params }) => {
                     </div>
                 </div>
             </div >
+            <ViewReason onClose={() => setState(null)} open={!!state} message={state}/>
         </>
 
     )

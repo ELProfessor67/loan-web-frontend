@@ -954,6 +954,16 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
           readOnly={!isEdittable} />
       </td>
       <td className="border-r p-1 text-sm">
+        <label htmlFor={`sign-${vendorType}`} className="cursor-pointer text-blue-600 hover:underline text-sm">
+          {state.sign?.name || "Choose file"}
+        </label>
+        <input
+          id={`sign-${vendorType}`}
+          type="file"
+          className="hidden"
+          onChange={(e) => handleSignFileChange(e, setState)} />
+      </td>
+      <td className="border-r p-1 text-sm">
         <input type="text" className="w-full  px-1" value={state.ship?.date} onChange={(e) => handleShipDateChange(setState, e.target.value)} readOnly={!isEdittable} />
       </td>
       <td className="border-r p-1 text-sm">
@@ -992,16 +1002,7 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
 
 
 
-      <td className="border-l p-1 text-sm">
-        <label htmlFor={`sign-${vendorType}`} className="cursor-pointer text-blue-600 hover:underline text-sm">
-          {state.sign?.name || "Choose file"}
-        </label>
-        <input
-          id={`sign-${vendorType}`}
-          type="file"
-          className="hidden"
-          onChange={(e) => handleSignFileChange(e, setState)} />
-      </td>
+      
     </tr>
   )
 
@@ -1095,13 +1096,13 @@ const NewAddVendorForn = ({ open, onClose, members, companies, setMemberOpen, sa
                   <th className="border p-1">PO Number</th>
                   <th className="border p-1">Amount</th>
                   <th className="border p-1">Attach</th>
+                  <th className="border p-1">Sign Attachment</th>
                   <th className="border p-1">Ship Date</th>
                   <th className="border p-1">attach</th>
                   <th className="border p-1">Received Date</th>
                   <th className="border p-1">attach</th>
                   <th className="border p-1">Tracking Number</th>
                   <th className="border p-1">Tracking Link</th>
-                  <th className="border p-1">Sign Attachment</th>
                 </tr>
               </thead>
               <tbody>

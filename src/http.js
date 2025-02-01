@@ -36,6 +36,7 @@ export const addVendorRequest = async (formData) => await api.post('/vendor/add'
     }
 });
 export const updateVednorRequest = async (formData,id) => await api.put(`/vendor/update/${id}`,formData);
+export const updateStateVednorRequest = async (formData,id) => await api.put(`/vendor/update-state-status/${id}`,formData);
 
 
 export const updateUserRequest = async (formData) => await api.put('/user/update',formData);

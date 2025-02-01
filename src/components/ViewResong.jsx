@@ -12,7 +12,6 @@ const ViewReason = ({ open, onClose,message }) => {
                 </button>
 
                 <div className='mt-1'>
-                    <h1>Rejection Reason</h1>
                     <p className='text-[16px] leading-[24px] text-black/80 mt-4'>{message}</p>
                 </div>
                 
