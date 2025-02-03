@@ -1,9 +1,10 @@
 'use client';
 
+import SendMail from "@/components/SendMail";
 import ViewReason from "@/components/ViewResong";
 import { BACKEND_URL } from "@/contants/URLS";
 import { getVendorDetailRequest } from "@/http";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 
 
@@ -69,6 +70,8 @@ const renderRow = (
 const page = ({ params }) => {
     const { id } = params;
     const [state,setState] = useState(null)
+    const [sendMailOpen,setSendMailOpen] = useState(false);
+
 
     const getVendorDetail = async () => {
         try {
@@ -78,7 +81,22 @@ const page = ({ params }) => {
             return null
         }
     }
-    const { data, isLoading } = useQuery(id, getVendorDetail)
+    const { data, isLoading } = useQuery(id, getVendorDetail);
+
+
+    const isAllDocumentVerified = useMemo(() => {
+        if(!data) return false;
+
+        let isVerified = true;
+
+        ['mdse','freight','freight2','warehouse','misc'].map(type => {
+            if(data[type].amount && data[type].status != "verified"){
+                isVerified = false;
+            }
+        });
+
+        return isVerified;
+    },[data])
 
     if (isLoading) {
         return <h1>Loading...</h1>
@@ -88,7 +106,12 @@ const page = ({ params }) => {
         <>
             <div className="p-4 sm:ml-64">
                 <div className="p-4 rounded-lg ">
+
                     <div className='h-fit'>
+                        <div className="flex items-center justify-end my-4">
+                            <button className="bg-blue-500 hover:text-blue-600 text-center text-white py-2 px-2 rounded-md disabled:opacity-40 disabled:cursor-not-allowed " disabled={!isAllDocumentVerified} onClick={() => setSendMailOpen(true)}>Send Mail</button>
+                        </div>
+
 
                         <div className="p-4 bg-green-50 font-sans text-sm">
                             <h1 className="text-2xl font-bold mb-4">DEAL {data?.dealId}</h1>
@@ -145,6 +168,7 @@ const page = ({ params }) => {
                 </div>
             </div >
             <ViewReason onClose={() => setState(null)} open={!!state} message={state}/>
+            <SendMail open={sendMailOpen} onClose={() => setSendMailOpen(false)}/>
         </>
 
     )
